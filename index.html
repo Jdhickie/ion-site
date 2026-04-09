@@ -55,7 +55,7 @@
 
     .container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
 
-    section { padding: 7rem 0; }
+    section { padding: 7rem 0; position: relative; z-index: 1; }
 
     /* ================================
        NAVIGATION
@@ -144,13 +144,19 @@
       position: relative; overflow: hidden;
     }
 
-    /* Dot grid texture */
-    #hero::before {
+    /* Dot grid texture — full page, fixed, with parallax via CSS vars */
+    body {
+      --grid-x: 0px;
+      --grid-y: 0px;
+    }
+    body::after {
       content: '';
-      position: absolute; inset: 0;
+      position: fixed; inset: 0;
       background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 26px 26px;
+      background-position: var(--grid-x) var(--grid-y);
       pointer-events: none;
+      z-index: 0;
     }
 
     .hero-glow {
@@ -435,6 +441,7 @@
       border-top: 1px solid var(--border);
       display: flex; justify-content: space-between; align-items: center;
       font-size: 0.8rem; color: var(--text-3);
+      position: relative; z-index: 1;
     }
     .footer-logo { font-weight: 600; color: var(--text-2); letter-spacing: -0.02em; font-size: 0.95rem; }
     .footer-logo .a { color: var(--accent); }
@@ -505,7 +512,7 @@
     <div class="container">
       <div class="hero-inner">
         <div>
-          <div class="eyebrow">Software &amp; Automation · Ireland</div>
+          <div class="eyebrow">Systems · Process Analysis &amp; Refinement · Ireland</div>
           <h1 class="hero-title">
             Build smarter.<br>
             Automate <span class="hi">everything.</span><br>
@@ -539,7 +546,6 @@
   <section id="services">
     <div class="container">
       <div class="sh" data-r>
-        <div class="sh-eyebrow">What I do</div>
         <h2 class="sh-title">Services</h2>
         <p class="sh-desc">From concept to production — covering the full stack with a focus on automation and efficiency at every layer.</p>
       </div>
@@ -785,11 +791,41 @@
     <span>© 2026 Íon Consulting Ltd. Ireland.</span>
     <div class="footer-right">
       <div class="fdot"></div>
-      <span>John Daniel Hickie · Ireland</span>
+      <span>Íon · Ireland</span>
     </div>
   </footer>
 
   <script>
+    // ================================
+    // DOT GRID PARALLAX
+    // ================================
+    (function () {
+      const STRENGTH = 10; // max px shift in each axis
+      let tX = 0, tY = 0, cX = 0, cY = 0;
+      let raf;
+
+      document.addEventListener('mousemove', (e) => {
+        // Normalise to -1 … +1 from screen centre
+        const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+        tX = nx * STRENGTH;
+        tY = ny * STRENGTH;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      function tick() {
+        raf = null;
+        // Ease towards target
+        cX += (tX - cX) * 0.08;
+        cY += (tY - cY) * 0.08;
+        document.body.style.setProperty('--grid-x', cX.toFixed(2) + 'px');
+        document.body.style.setProperty('--grid-y', cY.toFixed(2) + 'px');
+        if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
+          raf = requestAnimationFrame(tick);
+        }
+      }
+    })();
+
     // ================================
     // NAV SCROLL STATE
     // ================================
