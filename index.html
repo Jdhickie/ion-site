@@ -910,21 +910,19 @@
 
   <script type="module">
     // ================================
-    // HERO PARTICLE FIELD
+    // HERO ORB FIELD
     // ================================
     (async function () {
-      const hero = document.getElementById('hero');
+      const hero   = document.getElementById('hero');
       const canvas = document.getElementById('ion-particles');
       if (!hero || !canvas) return;
 
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const mobile  = window.innerWidth < 768;
-      const COUNT   = mobile ? 80 : 200;
+      const COUNT   = mobile ? 10 : 20;
+      const SEG     = mobile ? 16 : 32; // sphere segments
 
-      // Accent: --accent #1D9E75 = rgb(29, 158, 117)
-      const AR = 29 / 255, AG = 158 / 255, AB = 117 / 255;
-
-      // Lazy-load Three.js only when hero enters viewport
+      // Lazy-load Three.js when hero enters viewport
       await new Promise(resolve => {
         if (hero.getBoundingClientRect().top < window.innerHeight) { resolve(); return; }
         const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); resolve(); } }, { threshold: 0 });
@@ -933,105 +931,127 @@
 
       const {
         WebGLRenderer, Scene, PerspectiveCamera,
-        BufferGeometry, BufferAttribute,
-        ShaderMaterial, Points, AdditiveBlending,
+        SphereGeometry, Mesh, MeshPhysicalMaterial,
+        DirectionalLight, AmbientLight,
+        Color, MathUtils,
       } = await import('https://esm.sh/three@0.163.0');
 
-      // Renderer — alpha:true gives transparent background
       const W = hero.offsetWidth, H = hero.offsetHeight;
-      const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: false });
+
+      // antialias only on desktop — saves mobile GPU
+      const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: !mobile });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
       renderer.setSize(W, H);
       renderer.setClearColor(0x000000, 0);
 
       const scene  = new Scene();
-      const camera = new PerspectiveCamera(70, W / H, 0.1, 50);
-      camera.position.z = 8;
+      const camera = new PerspectiveCamera(60, W / H, 0.1, 100);
+      camera.position.z = 15;
 
-      // Spread coords — oversize to leave headroom for parallax shift
-      const SW = 30, SH = SW / (W / H);
+      // ── Lighting ──────────────────────────────────────────────
+      // Key: upper-left, white — creates the sharp top-left specular highlight
+      const keyLight = new DirectionalLight(0xffffff, 3.5);
+      keyLight.position.set(-4, 6, 8);
+      scene.add(keyLight);
 
-      const pos    = new Float32Array(COUNT * 3);
-      const col    = new Float32Array(COUNT * 3);
-      const sizes  = new Float32Array(COUNT);
-      const alphas = new Float32Array(COUNT);
-      const vx     = new Float32Array(COUNT);
-      const vy     = new Float32Array(COUNT);
+      // Rim: lower-right, pale emerald — subtle counter-light
+      const rimLight = new DirectionalLight(0x5fedb8, 0.5);
+      rimLight.position.set(5, -3, 3);
+      scene.add(rimLight);
+
+      // Ambient: very dim dark-green fill
+      scene.add(new AmbientLight(0x061a0f, 1.8));
+
+      // Visible world size at z=0 (fov=60, camera z=15)
+      const vH = 2 * Math.tan(MathUtils.degToRad(30)) * 15; // ~17.3 units
+      const vW = vH * (W / H);
+
+      // Emerald palette — from deep to bright
+      const PALETTE = [0x0a3d28, 0x0e5436, 0x145c44, 0x1a7a5a, 0x1D9E75];
+
+      // One shared geometry — each mesh is scaled individually
+      const unitSphere = new SphereGeometry(1, SEG, SEG);
+
+      const meshes = [];
+      const states = [];
 
       for (let i = 0; i < COUNT; i++) {
-        const z     = Math.random() * 7 - 4;   // -4 (far) to 3 (near)
-        const depth = (z + 4) / 7;              // 0 = far, 1 = near
+        // Size buckets: 25% large, 35% medium, 40% small
+        const t      = i / COUNT;
+        const bucket = t < 0.25 ? 'large' : t < 0.60 ? 'medium' : 'small';
 
-        pos[i*3]   = (Math.random() - 0.5) * SW;
-        pos[i*3+1] = (Math.random() - 0.5) * SH;
-        pos[i*3+2] = z;
+        const radius  = bucket === 'large'  ? 1.8 + Math.random() * 1.8    // 1.8–3.6 units
+                      : bucket === 'medium' ? 0.65 + Math.random() * 0.75  // 0.65–1.4 units
+                      :                       0.18 + Math.random() * 0.32; // 0.18–0.5 units
 
-        // Bias toward white; occasional accent-tinted particles
-        const t      = Math.pow(Math.random(), 2.2);
-        col[i*3]   = 1 * (1 - t) + AR * t;
-        col[i*3+1] = 1 * (1 - t) + AG * t;
-        col[i*3+2] = 1 * (1 - t) + AB * t;
+        // depth: 0=background, 1=foreground
+        const depth   = bucket === 'large'  ? 0.45 + Math.random() * 0.45
+                      : bucket === 'medium' ? 0.15 + Math.random() * 0.70
+                      :                       Math.random();
 
-        sizes[i]  = 0.5 + depth * 2.8;    // 0.5 (far) → 3.3 (near)
-        alphas[i] = 0.06 + depth * 0.28;  // 0.06 (far) → 0.34 (near)
+        // Foreground: sharper + more opaque. Background: softer + dimmer.
+        const opacity = bucket === 'large'  ? 0.50 + depth * 0.28  // 0.50–0.78
+                      : bucket === 'medium' ? 0.22 + depth * 0.30  // 0.22–0.52
+                      :                       0.12 + depth * 0.26; // 0.12–0.38
 
-        // Extremely slow drift
-        vx[i] = (Math.random() - 0.5) * 0.00018;
-        vy[i] = (Math.random() - 0.5) * 0.00010;
+        const roughness = 0.04 + (1 - depth) * 0.22; // near=crisp, far=softer
+        const ccRough   = 0.03 + (1 - depth) * 0.14;
+
+        const baseColor = new Color(PALETTE[Math.floor(Math.random() * PALETTE.length)]);
+
+        const mat = new MeshPhysicalMaterial({
+          color:              baseColor,
+          emissive:           baseColor.clone().multiplyScalar(0.07),
+          metalness:          0.12,
+          roughness,
+          clearcoat:          1.0,       // glass-like top layer
+          clearcoatRoughness: ccRough,
+          transparent:        true,
+          opacity,
+          depthWrite:         false,     // prevents z-fighting on transparent overlaps
+        });
+
+        const mesh = new Mesh(unitSphere, mat);
+        mesh.scale.setScalar(radius);
+
+        // ── Placement: keep a clear zone (~30% of vH) around centre ──
+        // The hero title lives there — orbs stay at the edges/corners.
+        let x, y, attempts = 0;
+        const safeR = vH * 0.30; // ~5.2 units
+        do {
+          x = (Math.random() - 0.5) * vW * 1.1;
+          y = (Math.random() - 0.5) * vH * 1.0;
+          attempts++;
+        } while (Math.sqrt(x * x + y * y) < safeR && attempts < 40);
+
+        const z = depth * 4 - 2; // -2 (far) to +2 (near)
+        mesh.position.set(x, y, z);
+        scene.add(mesh);
+        meshes.push(mesh);
+
+        states.push({
+          bx: x,
+          by: y,
+          vx: (Math.random() - 0.5) * 0.00045, // very slow drift
+          vy: (Math.random() - 0.5) * 0.00025,
+          pf: 0.25 + depth * 1.1,               // parallax: far=0.25, near=1.35
+        });
       }
 
-      const geo = new BufferGeometry();
-      geo.setAttribute('position', new BufferAttribute(pos,    3));
-      geo.setAttribute('color',    new BufferAttribute(col,    3));
-      geo.setAttribute('size',     new BufferAttribute(sizes,  1));
-      geo.setAttribute('alpha',    new BufferAttribute(alphas, 1));
-
-      const mat = new ShaderMaterial({
-        transparent: true,
-        depthWrite:  false,
-        blending:    AdditiveBlending,
-        vertexShader: `
-          attribute float size;
-          attribute float alpha;
-          attribute vec3  color;
-          varying   vec3  vColor;
-          varying   float vAlpha;
-          void main() {
-            vColor = color;
-            vAlpha = alpha;
-            vec4 mvp    = modelViewMatrix * vec4(position, 1.0);
-            gl_PointSize = size * (500.0 / -mvp.z);
-            gl_Position  = projectionMatrix * mvp;
-          }
-        `,
-        fragmentShader: `
-          varying vec3  vColor;
-          varying float vAlpha;
-          void main() {
-            float d = length(gl_PointCoord - 0.5) * 2.0;
-            float a = smoothstep(1.0, 0.15, d) * vAlpha;
-            gl_FragColor = vec4(vColor, a);
-          }
-        `,
-      });
-
-      const points = new Points(geo, mat);
-      scene.add(points);
-
-      // Mouse parallax state
+      // Mouse parallax
       let mx = 0, my = 0, tx = 0, ty = 0;
       if (!reduced) {
         document.addEventListener('mousemove', e => {
-          tx =  ((e.clientX / window.innerWidth)  - 0.5) * 0.55;
-          ty = -((e.clientY / window.innerHeight) - 0.5) * 0.55;
+          tx =  (e.clientX / window.innerWidth  - 0.5) * 1.4;
+          ty = -(e.clientY / window.innerHeight - 0.5) * 0.9;
         }, { passive: true });
       }
 
-      // Pause rendering when hero is off-screen (saves mobile battery)
+      // Pause RAF when hero is off-screen
       let visible = true;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
 
-      // Resize handler
+      // Resize
       window.addEventListener('resize', () => {
         const W2 = hero.offsetWidth, H2 = hero.offsetHeight;
         camera.aspect = W2 / H2;
@@ -1039,30 +1059,32 @@
         renderer.setSize(W2, H2);
       }, { passive: true });
 
-      // Initial static render (satisfies prefers-reduced-motion)
+      // Static render for reduced-motion users
       renderer.render(scene, camera);
       if (reduced) return;
+
+      const hwx = vW * 0.65, hwy = vH * 0.60;
 
       (function tick() {
         requestAnimationFrame(tick);
         if (!visible) return;
 
-        const hw = SW / 2, hh = SH / 2;
-        for (let i = 0; i < COUNT; i++) {
-          pos[i*3]   += vx[i];
-          pos[i*3+1] += vy[i];
-          if (pos[i*3]   >  hw) pos[i*3]   -= SW;
-          if (pos[i*3]   < -hw) pos[i*3]   += SW;
-          if (pos[i*3+1] >  hh) pos[i*3+1] -= SH;
-          if (pos[i*3+1] < -hh) pos[i*3+1] += SH;
-        }
-        geo.attributes.position.needsUpdate = true;
-
-        // Ease toward mouse target
         mx += (tx - mx) * 0.04;
         my += (ty - my) * 0.04;
-        points.position.x = mx;
-        points.position.y = my;
+
+        for (let i = 0; i < meshes.length; i++) {
+          const s = states[i];
+          s.bx += s.vx;
+          s.by += s.vy;
+          // Wrap at edges
+          if (s.bx >  hwx) s.bx -= hwx * 2;
+          if (s.bx < -hwx) s.bx += hwx * 2;
+          if (s.by >  hwy) s.by -= hwy * 2;
+          if (s.by < -hwy) s.by += hwy * 2;
+          // Base drift + per-depth parallax offset
+          meshes[i].position.x = s.bx + mx * s.pf;
+          meshes[i].position.y = s.by + my * s.pf;
+        }
 
         renderer.render(scene, camera);
       }());
