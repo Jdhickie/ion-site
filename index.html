@@ -144,6 +144,14 @@
       position: relative; overflow: hidden;
     }
 
+    #ion-particles {
+      position: absolute;
+      top: 0; left: 0;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+
     /* Dot grid texture — full page, fixed, with parallax via CSS vars */
     body {
       --grid-x: 0px;
@@ -508,6 +516,7 @@
        HERO
        ================================ -->
   <section id="hero">
+    <canvas id="ion-particles" aria-hidden="true"></canvas>
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-inner">
@@ -897,6 +906,167 @@
         this.reset();
       }, 900);
     });
+  </script>
+
+  <script type="module">
+    // ================================
+    // HERO PARTICLE FIELD
+    // ================================
+    (async function () {
+      const hero = document.getElementById('hero');
+      const canvas = document.getElementById('ion-particles');
+      if (!hero || !canvas) return;
+
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const mobile  = window.innerWidth < 768;
+      const COUNT   = mobile ? 80 : 200;
+
+      // Accent: --accent #1D9E75 = rgb(29, 158, 117)
+      const AR = 29 / 255, AG = 158 / 255, AB = 117 / 255;
+
+      // Lazy-load Three.js only when hero enters viewport
+      await new Promise(resolve => {
+        if (hero.getBoundingClientRect().top < window.innerHeight) { resolve(); return; }
+        const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); resolve(); } }, { threshold: 0 });
+        io.observe(hero);
+      });
+
+      const {
+        WebGLRenderer, Scene, PerspectiveCamera,
+        BufferGeometry, BufferAttribute,
+        ShaderMaterial, Points, AdditiveBlending,
+      } = await import('https://esm.sh/three@0.163.0');
+
+      // Renderer — alpha:true gives transparent background
+      const W = hero.offsetWidth, H = hero.offsetHeight;
+      const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+      renderer.setSize(W, H);
+      renderer.setClearColor(0x000000, 0);
+
+      const scene  = new Scene();
+      const camera = new PerspectiveCamera(70, W / H, 0.1, 50);
+      camera.position.z = 8;
+
+      // Spread coords — oversize to leave headroom for parallax shift
+      const SW = 30, SH = SW / (W / H);
+
+      const pos    = new Float32Array(COUNT * 3);
+      const col    = new Float32Array(COUNT * 3);
+      const sizes  = new Float32Array(COUNT);
+      const alphas = new Float32Array(COUNT);
+      const vx     = new Float32Array(COUNT);
+      const vy     = new Float32Array(COUNT);
+
+      for (let i = 0; i < COUNT; i++) {
+        const z     = Math.random() * 7 - 4;   // -4 (far) to 3 (near)
+        const depth = (z + 4) / 7;              // 0 = far, 1 = near
+
+        pos[i*3]   = (Math.random() - 0.5) * SW;
+        pos[i*3+1] = (Math.random() - 0.5) * SH;
+        pos[i*3+2] = z;
+
+        // Bias toward white; occasional accent-tinted particles
+        const t      = Math.pow(Math.random(), 2.2);
+        col[i*3]   = 1 * (1 - t) + AR * t;
+        col[i*3+1] = 1 * (1 - t) + AG * t;
+        col[i*3+2] = 1 * (1 - t) + AB * t;
+
+        sizes[i]  = 0.5 + depth * 2.8;    // 0.5 (far) → 3.3 (near)
+        alphas[i] = 0.06 + depth * 0.28;  // 0.06 (far) → 0.34 (near)
+
+        // Extremely slow drift
+        vx[i] = (Math.random() - 0.5) * 0.00018;
+        vy[i] = (Math.random() - 0.5) * 0.00010;
+      }
+
+      const geo = new BufferGeometry();
+      geo.setAttribute('position', new BufferAttribute(pos,    3));
+      geo.setAttribute('color',    new BufferAttribute(col,    3));
+      geo.setAttribute('size',     new BufferAttribute(sizes,  1));
+      geo.setAttribute('alpha',    new BufferAttribute(alphas, 1));
+
+      const mat = new ShaderMaterial({
+        transparent: true,
+        depthWrite:  false,
+        blending:    AdditiveBlending,
+        vertexShader: `
+          attribute float size;
+          attribute float alpha;
+          attribute vec3  color;
+          varying   vec3  vColor;
+          varying   float vAlpha;
+          void main() {
+            vColor = color;
+            vAlpha = alpha;
+            vec4 mvp    = modelViewMatrix * vec4(position, 1.0);
+            gl_PointSize = size * (500.0 / -mvp.z);
+            gl_Position  = projectionMatrix * mvp;
+          }
+        `,
+        fragmentShader: `
+          varying vec3  vColor;
+          varying float vAlpha;
+          void main() {
+            float d = length(gl_PointCoord - 0.5) * 2.0;
+            float a = smoothstep(1.0, 0.15, d) * vAlpha;
+            gl_FragColor = vec4(vColor, a);
+          }
+        `,
+      });
+
+      const points = new Points(geo, mat);
+      scene.add(points);
+
+      // Mouse parallax state
+      let mx = 0, my = 0, tx = 0, ty = 0;
+      if (!reduced) {
+        document.addEventListener('mousemove', e => {
+          tx =  ((e.clientX / window.innerWidth)  - 0.5) * 0.55;
+          ty = -((e.clientY / window.innerHeight) - 0.5) * 0.55;
+        }, { passive: true });
+      }
+
+      // Pause rendering when hero is off-screen (saves mobile battery)
+      let visible = true;
+      new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
+
+      // Resize handler
+      window.addEventListener('resize', () => {
+        const W2 = hero.offsetWidth, H2 = hero.offsetHeight;
+        camera.aspect = W2 / H2;
+        camera.updateProjectionMatrix();
+        renderer.setSize(W2, H2);
+      }, { passive: true });
+
+      // Initial static render (satisfies prefers-reduced-motion)
+      renderer.render(scene, camera);
+      if (reduced) return;
+
+      (function tick() {
+        requestAnimationFrame(tick);
+        if (!visible) return;
+
+        const hw = SW / 2, hh = SH / 2;
+        for (let i = 0; i < COUNT; i++) {
+          pos[i*3]   += vx[i];
+          pos[i*3+1] += vy[i];
+          if (pos[i*3]   >  hw) pos[i*3]   -= SW;
+          if (pos[i*3]   < -hw) pos[i*3]   += SW;
+          if (pos[i*3+1] >  hh) pos[i*3+1] -= SH;
+          if (pos[i*3+1] < -hh) pos[i*3+1] += SH;
+        }
+        geo.attributes.position.needsUpdate = true;
+
+        // Ease toward mouse target
+        mx += (tx - mx) * 0.04;
+        my += (ty - my) * 0.04;
+        points.position.x = mx;
+        points.position.y = my;
+
+        renderer.render(scene, camera);
+      }());
+    }());
   </script>
 </body>
 </html>
