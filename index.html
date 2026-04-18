@@ -777,6 +777,9 @@
               </button>
               <span id="formStatus"></span>
             </div>
+            <p id="formNote" style="display:none; margin-top:0.9rem; font-size:0.775rem; color:var(--text-3); line-height:1.6;">
+              Reply usually lands within a minute. If you don't see it, check your spam folder — and consider marking it 'not spam' to help future messages land properly.
+            </p>
           </form>
         </div>
 
@@ -916,6 +919,7 @@
         status.classList.add('show');
         btn.innerHTML = 'Sent ✓';
         this.reset();
+        document.getElementById('formNote').style.display = 'block';
       } catch (err) {
         status.textContent = err.name === 'AbortError'
           ? 'Request timed out. Please try again.'
