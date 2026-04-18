@@ -2,5 +2,10 @@
   "name": "ion-site",
   "version": "1.0.0",
   "type": "module",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@anthropic-ai/sdk": "latest",
+    "@supabase/supabase-js": "latest",
+    "resend": "latest"
+  }
 }
