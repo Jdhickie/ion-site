@@ -348,7 +348,7 @@
     /* ================================
        PROJECTS
        ================================ */
-    .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+    .projects-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.25rem; }
 
     .proj {
       padding: 2rem; background: var(--bg-2);
@@ -677,34 +677,57 @@
 
         <div class="proj" data-r data-d="1">
           <div class="proj-num">01</div>
-          <h3>Meals on Wheels</h3>
-          <p>Route planning and delivery management for a meals delivery charity. Replaced a spreadsheet-driven process with a purpose-built tool handling scheduling, dietary requirements, and volunteer coordination across multiple routes.</p>
-          <div class="tags">
+          <h3>Meals on Wheels SaaS</h3>
+          <p>A rural Irish Meals on Wheels branch was running client records, weekly meal plans, driver routes and billing across spreadsheets, paper sheets and WhatsApp — fragile, slow, and impossible to hand over.</p>
+          <p style="margin-top:0.75rem;">Built a purpose-built operations platform covering client management, week planner, delivery sheets, driver routes, billing and cancellation tracking. In pilot with Glin Meals on Wheels — core features live, additional modules rolling out. Designed to scale to other Irish branches.</p>
+          <div class="tags" style="margin-top:1rem;">
+            <span class="tag">SaaS</span>
             <span class="tag">Operations</span>
-            <span class="tag">Route Planning</span>
             <span class="tag">Non-Profit</span>
+            <span class="tag">React</span>
+            <span class="tag">Supabase</span>
           </div>
         </div>
 
         <div class="proj" data-r data-d="2">
           <div class="proj-num">02</div>
-          <h3>Lead Intelligence System</h3>
-          <p>Automated lead research and qualification pipeline that enriches incoming prospects with company data, scores them against an ICP, and routes warm leads directly into CRM — zero manual intervention required.</p>
-          <div class="tags">
+          <h3>AI Lead Response System</h3>
+          <p>Freelance enquiries either get generic autoresponders (feels lazy) or wait days for a reply (feels unresponsive). Neither is good for the lead or the operator.</p>
+          <p style="margin-top:0.75rem;">Built a system that reads each incoming enquiry, drafts a personalised reply with Claude based on what the person actually asked, and sends it automatically. Every lead is stored with its draft in Supabase. A kill-switch toggle lets the operator flip back to a manual approval flow at any time.</p>
+          <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--accent);">Live on this website — the contact form below runs on it.</p>
+          <div class="tags" style="margin-top:1rem;">
             <span class="tag">AI</span>
-            <span class="tag">Lead Scoring</span>
-            <span class="tag">CRM Integration</span>
+            <span class="tag">Automation</span>
+            <span class="tag">Claude API</span>
+            <span class="tag">Vercel</span>
+            <span class="tag">Supabase</span>
           </div>
         </div>
 
         <div class="proj" data-r data-d="3">
           <div class="proj-num">03</div>
+          <h3>Financial Dashboard</h3>
+          <p>Tracking real income and expenditure across multiple payment sources as a solo operator is either done in spreadsheets (tedious, out-of-date) or outsourced (expensive, slow feedback loop).</p>
+          <p style="margin-top:0.75rem;">Built a dashboard that pulls transaction data from Stripe, combines it with manually logged entries in Supabase, and surfaces income, expenditure and cashflow trends in one view. Query-based so new cuts can be added as questions come up.</p>
+          <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-3);">Running as an internal tool for Íon. Adaptable for other small operators who want financial visibility without accounting-software overhead.</p>
+          <div class="tags" style="margin-top:1rem;">
+            <span class="tag">Fintech</span>
+            <span class="tag">Stripe</span>
+            <span class="tag">Dashboards</span>
+            <span class="tag">Supabase</span>
+          </div>
+        </div>
+
+        <div class="proj" data-r data-d="4">
+          <div class="proj-num">04</div>
           <h3>Diesel Price Tracker</h3>
-          <p>Data aggregation tool that monitors diesel prices across Ireland, surfaces regional price trends, and sends threshold alerts — helping fleet operators make smarter refuelling decisions at scale.</p>
-          <div class="tags">
-            <span class="tag">Data Aggregation</span>
-            <span class="tag">Alerts</span>
-            <span class="tag">Fleet Ops</span>
+          <p>Irish fleet operators and long-distance drivers have no easy way to see where fuel is cheaper along a route — prices vary meaningfully between stations and regions.</p>
+          <p style="margin-top:0.75rem;">Built a community-powered fuel price map for Ireland with a route planner layer, so operators can compare prices across stations on their actual journey rather than just nearest-location.</p>
+          <p style="margin-top:0.75rem; font-size:0.8rem; color:var(--text-3);">Prototype built, not yet deployed. Intended as a free consumer tool with a premium layer for logistics operators.</p>
+          <div class="tags" style="margin-top:1rem;">
+            <span class="tag">Logistics</span>
+            <span class="tag">Maps</span>
+            <span class="tag">Community Data</span>
           </div>
         </div>
 
