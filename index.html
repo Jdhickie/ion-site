@@ -55,7 +55,6 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://esm.sh">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ================================
@@ -567,7 +566,7 @@
        HERO
        ================================ -->
   <section id="hero">
-    <canvas id="ion-particles" aria-hidden="true"></canvas>
+    <svg id="ion-particles" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"></svg>
     <div class="hero-glow"></div>
     <div class="container">
       <div class="hero-inner">
@@ -1010,185 +1009,181 @@
     });
   </script>
 
-  <script type="module">
+  <script>
     // ================================
-    // HERO ORB FIELD
+    // HERO ORB FIELD (SVG)
     // ================================
-    (async function () {
-      const hero   = document.getElementById('hero');
-      const canvas = document.getElementById('ion-particles');
-      if (!hero || !canvas) return;
+    (function () {
+      const hero = document.getElementById('hero');
+      const svg  = document.getElementById('ion-particles');
+      if (!hero || !svg) return;
 
+      const NS      = 'http://www.w3.org/2000/svg';
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const mobile  = window.innerWidth < 768;
       const COUNT   = mobile ? 10 : 20;
-      const SEG     = mobile ? 16 : 32; // sphere segments
 
-      // Lazy-load Three.js when hero enters viewport
-      await new Promise(resolve => {
-        if (hero.getBoundingClientRect().top < window.innerHeight) { resolve(); return; }
-        const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { io.disconnect(); resolve(); } }, { threshold: 0 });
-        io.observe(hero);
-      });
+      let W, H;
+      function resize() {
+        W = hero.offsetWidth; H = hero.offsetHeight;
+        svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+        svg.style.width  = W + 'px';
+        svg.style.height = H + 'px';
+      }
+      resize();
+      window.addEventListener('resize', resize, { passive: true });
 
-      const {
-        WebGLRenderer, Scene, PerspectiveCamera,
-        SphereGeometry, Mesh, MeshPhysicalMaterial,
-        DirectionalLight, AmbientLight,
-        Color, MathUtils,
-      } = await import('https://esm.sh/three@0.163.0');
+      const defs = document.createElementNS(NS, 'defs');
 
-      const W = hero.offsetWidth, H = hero.offsetHeight;
+      const filt = document.createElementNS(NS, 'filter');
+      filt.id = 'ion-blur';
+      filt.setAttribute('x', '-50%'); filt.setAttribute('y', '-50%');
+      filt.setAttribute('width', '200%'); filt.setAttribute('height', '200%');
+      const fe = document.createElementNS(NS, 'feGaussianBlur');
+      fe.setAttribute('stdDeviation', '5');
+      filt.appendChild(fe);
+      defs.appendChild(filt);
+      svg.appendChild(defs);
 
-      // antialias only on desktop — saves mobile GPU
-      const renderer = new WebGLRenderer({ canvas, alpha: true, antialias: !mobile });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-      renderer.setSize(W, H);
-      renderer.setClearColor(0x000000, 0);
-
-      const scene  = new Scene();
-      const camera = new PerspectiveCamera(60, W / H, 0.1, 100);
-      camera.position.z = 15;
-
-      // ── Lighting ──────────────────────────────────────────────
-      // Key: upper-left, white — creates the sharp top-left specular highlight
-      const keyLight = new DirectionalLight(0xffffff, 3.5);
-      keyLight.position.set(-4, 6, 8);
-      scene.add(keyLight);
-
-      // Rim: lower-right, pale emerald — subtle counter-light
-      const rimLight = new DirectionalLight(0x5fedb8, 0.5);
-      rimLight.position.set(5, -3, 3);
-      scene.add(rimLight);
-
-      // Ambient: very dim dark-green fill
-      scene.add(new AmbientLight(0x061a0f, 1.8));
-
-      // Visible world size at z=0 (fov=60, camera z=15)
-      const vH = 2 * Math.tan(MathUtils.degToRad(30)) * 15; // ~17.3 units
-      const vW = vH * (W / H);
-
-      // Emerald palette — from deep to bright
-      const PALETTE = [0x0a3d28, 0x0e5436, 0x145c44, 0x1a7a5a, 0x1D9E75];
-
-      // One shared geometry — each mesh is scaled individually
-      const unitSphere = new SphereGeometry(1, SEG, SEG);
-
-      const meshes = [];
-      const states = [];
-
-      for (let i = 0; i < COUNT; i++) {
-        // Size buckets: 25% large, 35% medium, 40% small
-        const t      = i / COUNT;
-        const bucket = t < 0.25 ? 'large' : t < 0.60 ? 'medium' : 'small';
-
-        const radius  = bucket === 'large'  ? 1.8 + Math.random() * 1.8    // 1.8–3.6 units
-                      : bucket === 'medium' ? 0.65 + Math.random() * 0.75  // 0.65–1.4 units
-                      :                       0.18 + Math.random() * 0.32; // 0.18–0.5 units
-
-        // depth: 0=background, 1=foreground
-        const depth   = bucket === 'large'  ? 0.45 + Math.random() * 0.45
-                      : bucket === 'medium' ? 0.15 + Math.random() * 0.70
-                      :                       Math.random();
-
-        // Foreground: sharper + more opaque. Background: softer + dimmer.
-        const opacity = bucket === 'large'  ? 0.50 + depth * 0.28  // 0.50–0.78
-                      : bucket === 'medium' ? 0.22 + depth * 0.30  // 0.22–0.52
-                      :                       0.12 + depth * 0.26; // 0.12–0.38
-
-        const roughness = 0.04 + (1 - depth) * 0.22; // near=crisp, far=softer
-        const ccRough   = 0.03 + (1 - depth) * 0.14;
-
-        const baseColor = new Color(PALETTE[Math.floor(Math.random() * PALETTE.length)]);
-
-        const mat = new MeshPhysicalMaterial({
-          color:              baseColor,
-          emissive:           baseColor.clone().multiplyScalar(0.07),
-          metalness:          0.12,
-          roughness,
-          clearcoat:          1.0,       // glass-like top layer
-          clearcoatRoughness: ccRough,
-          transparent:        true,
-          opacity,
-          depthWrite:         false,     // prevents z-fighting on transparent overlaps
+      function mkGrad(id, cx, cy, r, stops) {
+        const g = document.createElementNS(NS, 'radialGradient');
+        g.id = id;
+        g.setAttribute('cx', cx); g.setAttribute('cy', cy); g.setAttribute('r', r);
+        g.setAttribute('gradientUnits', 'objectBoundingBox');
+        stops.forEach(([off, col, op]) => {
+          const s = document.createElementNS(NS, 'stop');
+          s.setAttribute('offset', off);
+          s.setAttribute('stop-color', col);
+          s.setAttribute('stop-opacity', op);
+          g.appendChild(s);
         });
-
-        const mesh = new Mesh(unitSphere, mat);
-        mesh.scale.setScalar(radius);
-
-        // ── Placement: keep a clear zone (~30% of vH) around centre ──
-        // The hero title lives there — orbs stay at the edges/corners.
-        let x, y, attempts = 0;
-        const safeR = vH * 0.30; // ~5.2 units
-        do {
-          x = (Math.random() - 0.5) * vW * 1.1;
-          y = (Math.random() - 0.5) * vH * 1.0;
-          attempts++;
-        } while (Math.sqrt(x * x + y * y) < safeR && attempts < 40);
-
-        const z = depth * 4 - 2; // -2 (far) to +2 (near)
-        mesh.position.set(x, y, z);
-        scene.add(mesh);
-        meshes.push(mesh);
-
-        states.push({
-          bx: x,
-          by: y,
-          vx: (Math.random() - 0.5) * 0.00045, // very slow drift
-          vy: (Math.random() - 0.5) * 0.00025,
-          pf: 0.25 + depth * 1.1,               // parallax: far=0.25, near=1.35
-        });
+        return g;
       }
 
-      // Mouse parallax
+      function mkCirc(r, cx, cy, fill) {
+        const c = document.createElementNS(NS, 'circle');
+        c.setAttribute('r', r);
+        if (cx != null) c.setAttribute('cx', cx);
+        if (cy != null) c.setAttribute('cy', cy);
+        c.setAttribute('fill', fill);
+        return c;
+      }
+
+      const orbGroups = [], states = [];
+      const minDim = () => Math.min(W, H);
+
+      for (let i = 0; i < COUNT; i++) {
+        const t     = i / COUNT;
+        const isFg  = t < 0.25;
+        const isMid = t < 0.60;
+
+        const rad = isFg  ? (0.09 + Math.random() * 0.10) * minDim()
+                  : isMid ? (0.035 + Math.random() * 0.05) * minDim()
+                  :         (0.01  + Math.random() * 0.025) * minDim();
+
+        const depth = isFg  ? 0.5 + Math.random() * 0.5
+                    : isMid ? 0.2 + Math.random() * 0.6
+                    :         Math.random() * 0.3;
+        const opa   = isFg  ? 0.82 + depth * 0.12
+                    : isMid ? 0.35 + depth * 0.25
+                    :         0.12 + depth * 0.18;
+        const pf    = 0.25 + depth * 1.1;
+        const bid   = `ion${i}`;
+
+        defs.appendChild(mkGrad(`${bid}b`, '42%', '38%', '62%', [
+          ['0%',   '#2da968', 0.95],
+          ['28%',  '#1a7a5a', 0.97],
+          ['58%',  '#0a3d28', 0.96],
+          ['85%',  '#030f09', 0.88],
+          ['100%', '#000000', 0.04],
+        ]));
+
+        if (isFg || isMid) {
+          defs.appendChild(mkGrad(`${bid}h`, '30%', '24%', '52%', [
+            ['0%',   '#c8f0dc', 0.80],
+            ['32%',  '#7ecfa4', 0.28],
+            ['72%',  '#2da968', 0.04],
+            ['100%', '#1D9E75', 0.00],
+          ]));
+          defs.appendChild(mkGrad(`${bid}s`, '50%', '50%', '50%', [
+            ['0%',   '#ffffff', 0.95],
+            ['55%',  '#e0f8ed', 0.38],
+            ['100%', '#ffffff', 0.00],
+          ]));
+        }
+        if (isFg) {
+          defs.appendChild(mkGrad(`${bid}r`, '72%', '76%', '38%', [
+            ['0%',   '#3ddf8a', 0.52],
+            ['50%',  '#1D9E75', 0.14],
+            ['100%', '#1D9E75', 0.00],
+          ]));
+        }
+
+        const clipId = `${bid}c`;
+        const cp = document.createElementNS(NS, 'clipPath');
+        cp.id = clipId;
+        cp.appendChild(mkCirc(rad, 0, 0, 'none'));
+        defs.appendChild(cp);
+
+        const grp = document.createElementNS(NS, 'g');
+        grp.setAttribute('opacity', opa);
+        if (!isFg && !isMid) grp.setAttribute('filter', 'url(#ion-blur)');
+
+        const inner = document.createElementNS(NS, 'g');
+        inner.setAttribute('clip-path', `url(#${clipId})`);
+
+        inner.appendChild(mkCirc(rad, 0, 0, `url(#${bid}b)`));
+        if (isFg || isMid) {
+          inner.appendChild(mkCirc(rad, 0, 0, `url(#${bid}h)`));
+          inner.appendChild(mkCirc(rad * 0.13, -rad * 0.33, -rad * 0.37, `url(#${bid}s)`));
+        }
+        if (isFg) inner.appendChild(mkCirc(rad, 0, 0, `url(#${bid}r)`));
+
+        grp.appendChild(inner);
+        svg.appendChild(grp);
+        orbGroups.push(grp);
+
+        let x, y, att = 0;
+        const safeR = minDim() * 0.30;
+        const ocx = W / 2, ocy = H / 2;
+        do {
+          x = Math.random() * W;
+          y = Math.random() * H;
+          att++;
+        } while (Math.sqrt((x - ocx) ** 2 + (y - ocy) ** 2) < safeR && att < 40);
+
+        states.push({ bx: x, by: y, vx: (Math.random() - 0.5) * 0.04, vy: (Math.random() - 0.5) * 0.025, pf });
+        grp.setAttribute('transform', `translate(${x},${y})`);
+      }
+
       let mx = 0, my = 0, tx = 0, ty = 0;
       if (!reduced) {
         document.addEventListener('mousemove', e => {
-          tx =  (e.clientX / window.innerWidth  - 0.5) * 1.4;
-          ty = -(e.clientY / window.innerHeight - 0.5) * 0.9;
+          tx =  (e.clientX / window.innerWidth  - 0.5) * 50;
+          ty = -(e.clientY / window.innerHeight - 0.5) * 32;
         }, { passive: true });
       }
 
-      // Pause RAF when hero is off-screen
       let visible = true;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
 
-      // Resize
-      window.addEventListener('resize', () => {
-        const W2 = hero.offsetWidth, H2 = hero.offsetHeight;
-        camera.aspect = W2 / H2;
-        camera.updateProjectionMatrix();
-        renderer.setSize(W2, H2);
-      }, { passive: true });
-
-      // Static render for reduced-motion users
-      renderer.render(scene, camera);
       if (reduced) return;
-
-      const hwx = vW * 0.65, hwy = vH * 0.60;
 
       (function tick() {
         requestAnimationFrame(tick);
         if (!visible) return;
-
         mx += (tx - mx) * 0.04;
         my += (ty - my) * 0.04;
-
-        for (let i = 0; i < meshes.length; i++) {
+        for (let i = 0; i < orbGroups.length; i++) {
           const s = states[i];
-          s.bx += s.vx;
-          s.by += s.vy;
-          // Wrap at edges
-          if (s.bx >  hwx) s.bx -= hwx * 2;
-          if (s.bx < -hwx) s.bx += hwx * 2;
-          if (s.by >  hwy) s.by -= hwy * 2;
-          if (s.by < -hwy) s.by += hwy * 2;
-          // Base drift + per-depth parallax offset
-          meshes[i].position.x = s.bx + mx * s.pf;
-          meshes[i].position.y = s.by + my * s.pf;
+          s.bx += s.vx; s.by += s.vy;
+          if (s.bx >  W + 120) s.bx -= W + 240;
+          if (s.bx < -120)     s.bx += W + 240;
+          if (s.by >  H + 120) s.by -= H + 240;
+          if (s.by < -120)     s.by += H + 240;
+          orbGroups[i].setAttribute('transform',
+            `translate(${(s.bx + mx * s.pf).toFixed(1)},${(s.by + my * s.pf).toFixed(1)})`);
         }
-
-        renderer.render(scene, camera);
       }());
     }());
   </script>
