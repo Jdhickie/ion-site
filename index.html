@@ -783,6 +783,105 @@
       .mock-dash { flex-wrap: wrap; height: auto; }
       .md-tile { min-width: calc(50% - 0.2rem); }
     }
+
+    /* ================================
+       PROCESS STAGES
+       ================================ */
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stage {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem 1.5rem 1.4rem;
+      display: flex; flex-direction: column; gap: 0.7rem;
+      position: relative;
+      transition: border-color 0.25s;
+    }
+
+    .stage::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .stage:hover { border-color: var(--border-2); }
+    .stage:hover::before { transform: scaleX(1); }
+
+    .stage-meta {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 0.5rem;
+    }
+
+    .stage-num {
+      font-size: 0.65rem; font-weight: 700;
+      color: var(--text-3); letter-spacing: 0.08em;
+      padding: 0.1rem 0.4rem; border-radius: 3px;
+      background: var(--bg-3); border: 1px solid var(--border);
+    }
+
+    .stage-week {
+      font-size: 0.62rem; font-weight: 500;
+      color: var(--text-3); white-space: nowrap;
+      padding: 0.1rem 0.4rem; border-radius: 3px;
+      background: var(--bg-3); border: 1px solid var(--border);
+    }
+
+    .stage-name {
+      font-size: 1rem; font-weight: 600;
+      color: var(--text); letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .stage-desc {
+      font-size: 0.8rem; color: var(--text-2);
+      line-height: 1.65; font-weight: 300; flex: 1;
+    }
+
+    .stage-deliverables {
+      list-style: none;
+      display: flex; flex-direction: column; gap: 0.3rem;
+      padding-top: 0.6rem;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    .stage-deliverables li {
+      display: flex; align-items: baseline; gap: 0.45rem;
+      font-size: 0.72rem; color: var(--text-3);
+      line-height: 1.4; font-weight: 300;
+    }
+
+    .stage-deliverables li::before {
+      content: '·';
+      color: var(--accent); font-size: 1rem;
+      font-weight: 700; flex-shrink: 0; line-height: 1;
+    }
+
+    .process-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 2rem;
+      padding-top: 0.5rem;
+    }
+
+    .process-note {
+      font-size: 0.825rem; color: var(--text-3);
+      font-weight: 300; line-height: 1.6;
+    }
+
+    @media (max-width: 960px) {
+      .process-grid { grid-template-columns: repeat(2, 1fr); }
+      .process-footer { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .process-grid { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -796,7 +895,7 @@
       <li><a href="#services">Services</a></li>
       <li><a href="#projects">Projects</a></li>
       <li><a href="#about">About</a></li>
-      <li><a href="#how">Process</a></li>
+      <li><a href="#process">Process</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <a href="#contact" class="nav-cta">
@@ -1044,6 +1143,88 @@
   </section>
 
   <!-- ================================
+       PROCESS
+       ================================ -->
+  <section id="process">
+    <div class="container">
+      <div class="sh" data-r>
+        <div class="sh-eyebrow">The process</div>
+        <h2 class="sh-title">From first call to fully owned.</h2>
+        <p class="sh-desc" style="max-width:540px">A clear process. Fixed scope. No surprises. You know exactly what happens and when.</p>
+      </div>
+
+      <div class="process-grid">
+
+        <div class="stage" data-r data-d="1">
+          <div class="stage-meta">
+            <span class="stage-num">01</span>
+            <span class="stage-week">Week 1</span>
+          </div>
+          <h3 class="stage-name">Discovery</h3>
+          <p class="stage-desc">We map your stack, audit your workflows, and pinpoint where automation pays back fastest.</p>
+          <ul class="stage-deliverables">
+            <li>Systems audit</li>
+            <li>Opportunity map</li>
+            <li>Fixed-scope proposal</li>
+          </ul>
+        </div>
+
+        <div class="stage" data-r data-d="2">
+          <div class="stage-meta">
+            <span class="stage-num">02</span>
+            <span class="stage-week">Weeks 2–4</span>
+          </div>
+          <h3 class="stage-name">Build</h3>
+          <p class="stage-desc">Built in your environment. Your accounts, your repos, your infrastructure. No black boxes.</p>
+          <ul class="stage-deliverables">
+            <li>Production code</li>
+            <li>Integration testing</li>
+            <li>Staging deployment</li>
+          </ul>
+        </div>
+
+        <div class="stage" data-r data-d="3">
+          <div class="stage-meta">
+            <span class="stage-num">03</span>
+            <span class="stage-week">Weeks 4–5</span>
+          </div>
+          <h3 class="stage-name">Deploy</h3>
+          <p class="stage-desc">Production push with monitoring baked in. Verified before I step back.</p>
+          <ul class="stage-deliverables">
+            <li>Live deployment</li>
+            <li>Monitoring setup</li>
+            <li>Performance validation</li>
+          </ul>
+        </div>
+
+        <div class="stage" data-r data-d="4">
+          <div class="stage-meta">
+            <span class="stage-num">04</span>
+            <span class="stage-week">Weeks 5–6</span>
+          </div>
+          <h3 class="stage-name">Handoff</h3>
+          <p class="stage-desc">Full documentation, walkthrough recordings, and credential transfer. You own everything, with 30 days of support.</p>
+          <ul class="stage-deliverables">
+            <li>Written runbook</li>
+            <li>Loom walkthroughs</li>
+            <li>30-day support window</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <div class="process-footer" data-r>
+        <p class="process-note">Typical engagement: 4–6 weeks, start to finish. Audit-only engagements turn around in 1 week.</p>
+        <a href="#contact" class="btn btn-primary" id="discovery-cta">
+          Start with Discovery
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================================
        PROJECTS
        ================================ -->
   <section id="projects">
@@ -1217,6 +1398,7 @@
                 <option value="saas">SaaS / Web Application</option>
                 <option value="ai">AI Automation</option>
                 <option value="process">Process Consulting</option>
+                <option value="discovery">Discovery Call</option>
                 <option value="audit">Software Audit (€500)</option>
                 <option value="other">Something else</option>
               </select>
@@ -1249,7 +1431,7 @@
        ================================ -->
   <footer>
     <div class="footer-logo">Í<span class="a">on</span></div>
-    <span>© 2026 Íon — a John Daniel Hickie project. Ireland.</span>
+    <span>© 2026 Íon. Ireland.</span>
     <div class="footer-right">
       <div class="fdot"></div>
       <span>Íon · Ireland</span>
@@ -1264,6 +1446,13 @@
       setTimeout(function () {
         var sel = document.getElementById('fservice');
         if (sel) sel.value = 'audit';
+      }, 80);
+    });
+
+    document.getElementById('discovery-cta').addEventListener('click', function () {
+      setTimeout(function () {
+        var sel = document.getElementById('fservice');
+        if (sel) sel.value = 'discovery';
       }, 80);
     });
   </script>
