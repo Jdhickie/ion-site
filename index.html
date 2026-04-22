@@ -578,6 +578,211 @@
       .form-row { grid-template-columns: 1fr; }
       footer { flex-direction: column; gap: 0.75rem; text-align: center; }
     }
+
+    /* ================================
+       SYSTEMS GRID
+       ================================ */
+    .systems-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .sys {
+      grid-column: span 2;
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.6rem 1.5rem 1.4rem;
+      display: flex; flex-direction: column; gap: 0.65rem;
+      position: relative; overflow: hidden;
+      transition: border-color 0.25s;
+    }
+
+    /* 3-2 layout: center the second row of two cards */
+    .sys:nth-child(4) { grid-column: 2 / span 2; }
+    .sys:nth-child(5) { grid-column: 4 / span 2; }
+
+    .sys::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s ease;
+    }
+    .sys:hover { border-color: var(--border-2); }
+    .sys:hover::before { transform: scaleX(1); }
+
+    .sys-name {
+      font-size: 0.67rem; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: var(--accent);
+    }
+
+    .sys-tagline {
+      font-size: 0.925rem; font-weight: 600;
+      color: var(--text); line-height: 1.35;
+      letter-spacing: -0.015em;
+    }
+
+    .sys-desc {
+      font-size: 0.8rem; color: var(--text-2);
+      line-height: 1.65; font-weight: 300;
+      flex: 1;
+    }
+
+    .sys-mockup {
+      height: 130px; flex-shrink: 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0.8rem; overflow: hidden;
+    }
+
+    .sys-footer {
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 0.5rem;
+      margin-top: 0.1rem;
+    }
+
+    .sys-stack { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+
+    .sys-chip {
+      font-size: 0.6rem; font-weight: 500;
+      padding: 0.12rem 0.4rem; border-radius: 3px;
+      background: rgba(29,158,117,0.07);
+      color: var(--text-3);
+      border: 1px solid rgba(29,158,117,0.13);
+    }
+
+    .sys-price {
+      font-size: 0.72rem; font-weight: 600;
+      color: var(--text-2); white-space: nowrap;
+      padding: 0.18rem 0.6rem; border-radius: 20px;
+      border: 1px solid var(--border-2); flex-shrink: 0;
+    }
+
+    /* ---- Audit banner ---- */
+    .audit-banner {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 12px;
+      padding: 1.6rem 2rem;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 2rem;
+    }
+
+    .audit-text {
+      font-size: 0.9rem; color: var(--text-2);
+      line-height: 1.7; font-weight: 300; max-width: 520px;
+    }
+    .audit-text strong { color: var(--text); font-weight: 600; }
+
+    /* ================================
+       MINI-MOCKUPS
+       ================================ */
+
+    /* --- Lead feed --- */
+    .mock { width: 100%; }
+    .mock-feed { display: flex; flex-direction: column; gap: 0.55rem; }
+    .mf-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.7rem; color: var(--text-2); }
+    .mf-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .mf-dot.new   { background: #f59e0b; }
+    .mf-dot.think { background: var(--accent); opacity: 0.6; }
+    .mf-dot.sent  { background: var(--accent); }
+    .mf-t { margin-left: auto; color: var(--text-3); font-size: 0.62rem; padding-left: 0.5rem; }
+
+    /* --- Ops dashboard --- */
+    .mock-dash { display: flex; gap: 0.4rem; width: 100%; align-items: stretch; height: 100%; }
+    .md-tile {
+      flex: 1; background: var(--bg-3);
+      border: 1px solid var(--border); border-radius: 5px;
+      padding: 0.5rem; display: flex; flex-direction: column; gap: 0.1rem;
+    }
+    .md-lbl { font-size: 0.57rem; color: var(--text-3); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
+    .md-val { font-size: 0.95rem; font-weight: 700; color: var(--text); letter-spacing: -0.03em; line-height: 1.15; }
+    .md-spark { display: block; margin-top: auto; }
+
+    /* --- Extraction --- */
+    .mock-extract { display: flex; align-items: center; gap: 0.6rem; width: 100%; }
+    .me-doc {
+      display: flex; flex-direction: column; align-items: center; gap: 0.3rem;
+      font-size: 0.6rem; color: var(--text-3);
+      padding: 0.5rem 0.4rem; border: 1px solid var(--border);
+      border-radius: 5px; flex-shrink: 0; text-align: center;
+      background: var(--bg-3);
+    }
+    .me-arrow { color: var(--accent); font-size: 1rem; flex-shrink: 0; font-weight: 300; }
+    .me-table { flex: 1; display: flex; flex-direction: column; gap: 0.2rem; }
+    .me-row {
+      display: flex; gap: 0.35rem; font-size: 0.64rem;
+      background: var(--bg-3); border: 1px solid var(--border);
+      border-radius: 4px; padding: 0.18rem 0.4rem;
+    }
+    .me-key { color: var(--text-3); flex-shrink: 0; }
+    .me-val { color: var(--text); font-weight: 500; }
+
+    /* --- Workflow nodes --- */
+    .mock-flow { display: flex; flex-direction: column; align-items: center; gap: 0; width: 100%; }
+    .mfl-node {
+      font-size: 0.65rem; font-weight: 500;
+      padding: 0.22rem 0.65rem; border-radius: 4px;
+      text-align: center; white-space: nowrap;
+    }
+    .mfl-node.trigger {
+      background: rgba(29,158,117,0.15); color: var(--accent);
+      border: 1px solid rgba(29,158,117,0.3);
+    }
+    .mfl-node.action {
+      background: var(--bg-3); color: var(--text-2);
+      border: 1px solid var(--border);
+    }
+    .mfl-line {
+      width: 1px; height: 11px;
+      background: var(--border-2); position: relative;
+    }
+    .mfl-line::after {
+      content: '';
+      position: absolute; bottom: -4px; left: 50%;
+      transform: translateX(-50%);
+      border-left: 3px solid transparent;
+      border-right: 3px solid transparent;
+      border-top: 4px solid var(--border-2);
+    }
+
+    /* --- Knowledge Q&A --- */
+    .mock-qa { display: flex; flex-direction: column; gap: 0.55rem; width: 100%; }
+    .mqa-q {
+      display: flex; align-items: flex-start; gap: 0.4rem;
+      font-size: 0.72rem; font-weight: 600; color: var(--text); line-height: 1.4;
+    }
+    .mqa-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0;
+      background: var(--accent-a); border: 1px solid var(--accent-b);
+      color: var(--accent); font-size: 0.58rem; font-weight: 700;
+    }
+    .mqa-a {
+      font-size: 0.67rem; color: var(--text-2); line-height: 1.55;
+      padding-left: 1.35rem;
+    }
+
+    /* ================================
+       RESPONSIVE: systems
+       ================================ */
+    @media (max-width: 960px) {
+      .systems-grid { grid-template-columns: repeat(2, 1fr); }
+      .sys { grid-column: span 1 !important; }
+      .audit-banner { flex-direction: column; align-items: flex-start; }
+    }
+    @media (max-width: 560px) {
+      .systems-grid { grid-template-columns: 1fr; }
+      .mock-dash { flex-wrap: wrap; height: auto; }
+      .md-tile { min-width: calc(50% - 0.2rem); }
+    }
   </style>
 </head>
 <body>
@@ -661,67 +866,180 @@
   </section>
 
   <!-- ================================
-       SERVICES
+       SYSTEMS / SERVICES
        ================================ -->
   <section id="services">
     <div class="container">
       <div class="sh" data-r>
-        <div class="sh-eyebrow">The solution</div>
-        <h2 class="sh-title">Services</h2>
-        <p class="sh-desc">The goal isn't just efficiency — it's clarity. When systems handle the routine, you get your head back.</p>
+        <div class="sh-eyebrow">The systems</div>
+        <h2 class="sh-title">Five systems. Built in your stack. Owned by you.</h2>
+        <p class="sh-desc" style="max-width:600px">Each one is custom-built for your business, deployed in your environment, and yours from day one. No vendor lock-in. No subscription creep.</p>
       </div>
-      <div class="services-grid">
 
-        <div class="svc" data-r data-d="1">
-          <div class="svc-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2.5"/>
-              <path d="M8 21h8M12 17v4"/>
-            </svg>
+      <div class="systems-grid">
+
+        <!-- 1 — Lead Systems -->
+        <div class="sys" data-r data-d="1">
+          <div class="sys-name">Lead Systems</div>
+          <div class="sys-tagline">Every form, call, or DM gets an intelligent reply before it goes cold.</div>
+          <div class="sys-desc">AI-drafted responses to inbound leads. Captures, classifies, replies, and logs — automatically. Running live on íon.ie right now.</div>
+          <div class="sys-mockup">
+            <div class="mock mock-feed">
+              <div class="mf-row">
+                <span class="mf-dot new"></span>
+                <span>Lead received — hello@acme.ie</span>
+                <span class="mf-t">0s</span>
+              </div>
+              <div class="mf-row">
+                <span class="mf-dot think"></span>
+                <span>Drafting personalised reply…</span>
+                <span class="mf-t">2s</span>
+              </div>
+              <div class="mf-row">
+                <span class="mf-dot sent"></span>
+                <span>Reply sent + logged to DB</span>
+                <span class="mf-t">4s</span>
+              </div>
+            </div>
           </div>
-          <h3>SaaS Builds</h3>
-          <p>Full-stack web applications built to your spec — from MVPs to production-grade platforms. Clean architecture, long-term maintainability, no unnecessary complexity.</p>
-          <div class="tags">
-            <span class="tag">Web Apps</span>
-            <span class="tag">REST APIs</span>
-            <span class="tag">Databases</span>
-            <span class="tag">MVP → Production</span>
+          <div class="sys-footer">
+            <div class="sys-stack">
+              <span class="sys-chip">Claude API</span>
+              <span class="sys-chip">Resend</span>
+              <span class="sys-chip">Supabase</span>
+            </div>
+            <span class="sys-price">From €1,500</span>
           </div>
         </div>
 
-        <div class="svc" data-r data-d="2">
-          <div class="svc-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-            </svg>
+        <!-- 2 — Ops Dashboards -->
+        <div class="sys" data-r data-d="2">
+          <div class="sys-name">Ops Dashboards</div>
+          <div class="sys-tagline">One screen. Live data. The numbers that actually run your business.</div>
+          <div class="sys-desc">Persistent dashboards connected to your tools, refreshing on open. Replaces two or three reporting SaaS subscriptions with something you own.</div>
+          <div class="sys-mockup">
+            <div class="mock mock-dash">
+              <div class="md-tile">
+                <div class="md-lbl">Revenue MTD</div>
+                <div class="md-val">€12,400</div>
+                <svg class="md-spark" width="100%" height="22" viewBox="0 0 64 22" preserveAspectRatio="none" aria-hidden="true">
+                  <polyline points="0,18 10,14 20,16 30,8 40,10 52,4 64,6" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="md-tile">
+                <div class="md-lbl">Pipeline</div>
+                <div class="md-val">€28k</div>
+              </div>
+              <div class="md-tile">
+                <div class="md-lbl">Uptime</div>
+                <div class="md-val">99.9%</div>
+              </div>
+            </div>
           </div>
-          <h3>AI Automation</h3>
-          <p>Integrate LLMs and intelligent pipelines into your business — automate research, extract insights from data, and build agents that run without supervision.</p>
-          <div class="tags">
-            <span class="tag">LLMs</span>
-            <span class="tag">Agents</span>
-            <span class="tag">RAG</span>
-            <span class="tag">Pipelines</span>
+          <div class="sys-footer">
+            <div class="sys-stack">
+              <span class="sys-chip">Live Artifacts</span>
+              <span class="sys-chip">Supabase</span>
+              <span class="sys-chip">MCP</span>
+            </div>
+            <span class="sys-price">From €2,000</span>
           </div>
         </div>
 
-        <div class="svc" data-r data-d="3">
-          <div class="svc-icon">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/>
-            </svg>
+        <!-- 3 — Extraction Agents -->
+        <div class="sys" data-r data-d="3">
+          <div class="sys-name">Extraction Agents</div>
+          <div class="sys-tagline">Invoices, contracts, grant briefs — turned into clean, structured data.</div>
+          <div class="sys-desc">Unstructured documents in, structured records in your database out. Eliminates manual data entry and the errors that come with it.</div>
+          <div class="sys-mockup">
+            <div class="mock mock-extract">
+              <div class="me-doc">
+                <svg width="20" height="24" viewBox="0 0 20 24" fill="none" aria-hidden="true">
+                  <rect x="1" y="1" width="13" height="17" rx="1.5" stroke="var(--text-3)" stroke-width="1.2"/>
+                  <path d="M4 6h7M4 9h7M4 12h4" stroke="var(--text-3)" stroke-width="1" stroke-linecap="round"/>
+                  <path d="M12 1v4h5" stroke="var(--text-3)" stroke-width="1.2" stroke-linecap="round"/>
+                  <rect x="13" y="3" width="6" height="8" rx="1" stroke="var(--text-3)" stroke-width="1.2"/>
+                </svg>
+                <span>invoice.pdf</span>
+              </div>
+              <div class="me-arrow">→</div>
+              <div class="me-table">
+                <div class="me-row"><span class="me-key">Amount</span><span class="me-val">€4,200</span></div>
+                <div class="me-row"><span class="me-key">Date</span><span class="me-val">2026-03-15</span></div>
+                <div class="me-row"><span class="me-key">Vendor</span><span class="me-val">Acme Ltd</span></div>
+              </div>
+            </div>
           </div>
-          <h3>Process Consulting</h3>
-          <p>Audit your existing workflows, identify bottlenecks, and implement systematic improvements. Turn manual, fragile processes into reliable, automated systems.</p>
-          <div class="tags">
-            <span class="tag">Workflow Design</span>
-            <span class="tag">Automation</span>
-            <span class="tag">Systems Thinking</span>
+          <div class="sys-footer">
+            <div class="sys-stack">
+              <span class="sys-chip">Claude API</span>
+              <span class="sys-chip">Structured outputs</span>
+              <span class="sys-chip">Supabase</span>
+            </div>
+            <span class="sys-price">From €1,500</span>
+          </div>
+        </div>
+
+        <!-- 4 — Workflow Automation (row 2, centered) -->
+        <div class="sys" data-r data-d="1">
+          <div class="sys-name">Workflow Automation</div>
+          <div class="sys-tagline">The follow-ups and handoffs your team does manually — handled.</div>
+          <div class="sys-desc">n8n + Claude replacing Zapier sprawl with owned, auditable workflows. You see every step, own the logic, and can change it any time.</div>
+          <div class="sys-mockup">
+            <div class="mock mock-flow">
+              <div class="mfl-node trigger">Form submitted</div>
+              <div class="mfl-line"></div>
+              <div class="mfl-node action">Draft reply (Claude)</div>
+              <div class="mfl-line"></div>
+              <div class="mfl-node action">Notify + log to DB</div>
+            </div>
+          </div>
+          <div class="sys-footer">
+            <div class="sys-stack">
+              <span class="sys-chip">n8n</span>
+              <span class="sys-chip">Claude API</span>
+              <span class="sys-chip">MCP</span>
+            </div>
+            <span class="sys-price">From €2,500</span>
+          </div>
+        </div>
+
+        <!-- 5 — Knowledge Systems (row 2, centered) -->
+        <div class="sys" data-r data-d="2">
+          <div class="sys-name">Knowledge Systems</div>
+          <div class="sys-tagline">Your team stops asking the same questions. The docs already have the answers.</div>
+          <div class="sys-desc">RAG pipelines over your internal docs, SOPs, and support history. Ask in plain English, get answers from your own knowledge base.</div>
+          <div class="sys-mockup">
+            <div class="mock mock-qa">
+              <div class="mqa-q">
+                <span class="mqa-icon">?</span>
+                What's our refund policy?
+              </div>
+              <div class="mqa-a">Customers can request a full refund within 14 days of delivery. For services partially rendered, a pro-rata amount applies based on work completed.</div>
+            </div>
+          </div>
+          <div class="sys-footer">
+            <div class="sys-stack">
+              <span class="sys-chip">pgvector</span>
+              <span class="sys-chip">Supabase</span>
+              <span class="sys-chip">Claude</span>
+            </div>
+            <span class="sys-price">From €2,000</span>
           </div>
         </div>
 
       </div>
-      <p class="solution-close" data-r>Clear thinking leads to better decisions — and better decisions drive revenue.</p>
+
+      <div class="audit-banner" data-r>
+        <p class="audit-text">
+          <strong>Not sure which one?</strong> Start with a Software Audit (€500). I map your stack, flag what's replaceable, and tell you where the ROI actually is.
+        </p>
+        <a href="#contact" class="btn btn-primary" id="audit-cta">
+          Book the audit
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+
     </div>
   </section>
 
@@ -899,6 +1217,7 @@
                 <option value="saas">SaaS / Web Application</option>
                 <option value="ai">AI Automation</option>
                 <option value="process">Process Consulting</option>
+                <option value="audit">Software Audit (€500)</option>
                 <option value="other">Something else</option>
               </select>
             </div>
@@ -936,6 +1255,18 @@
       <span>Íon · Ireland</span>
     </div>
   </footer>
+
+  <script>
+    // ================================
+    // AUDIT CTA PRE-FILL
+    // ================================
+    document.getElementById('audit-cta').addEventListener('click', function () {
+      setTimeout(function () {
+        var sel = document.getElementById('fservice');
+        if (sel) sel.value = 'audit';
+      }, 80);
+    });
+  </script>
 
   <script>
     // ================================
@@ -1097,15 +1428,6 @@
       window.addEventListener('resize', resize, { passive: true });
 
       const defs = document.createElementNS(NS, 'defs');
-
-      const filt = document.createElementNS(NS, 'filter');
-      filt.id = 'ion-blur';
-      filt.setAttribute('x', '-50%'); filt.setAttribute('y', '-50%');
-      filt.setAttribute('width', '200%'); filt.setAttribute('height', '200%');
-      const fe = document.createElementNS(NS, 'feGaussianBlur');
-      fe.setAttribute('stdDeviation', '5');
-      filt.appendChild(fe);
-      defs.appendChild(filt);
       svg.appendChild(defs);
 
       function mkGrad(id, cx, cy, r, stops) {
@@ -1185,12 +1507,16 @@
         const clipId = `${bid}c`;
         const cp = document.createElementNS(NS, 'clipPath');
         cp.id = clipId;
-        cp.appendChild(mkCirc(rad, 0, 0, 'none'));
+        // 'white' fill is more reliable than 'none' for clipPath geometry across Safari versions
+        cp.appendChild(mkCirc(rad, 0, 0, 'white'));
         defs.appendChild(cp);
 
         const grp = document.createElementNS(NS, 'g');
         grp.setAttribute('opacity', opa);
-        if (!isFg && !isMid) grp.setAttribute('filter', 'url(#ion-blur)');
+        // CSS filter instead of SVG filter attribute — avoids iOS Safari SVG filter rendering bugs
+        if (!isFg && !isMid) grp.style.filter = 'blur(5px)';
+        // GPU compositing hint — lets the compositor move this layer without repainting
+        grp.style.willChange = 'transform';
 
         const inner = document.createElementNS(NS, 'g');
         inner.setAttribute('clip-path', `url(#${clipId})`);
@@ -1215,21 +1541,31 @@
           att++;
         } while (Math.sqrt((x - ocx) ** 2 + (y - ocy) ** 2) < safeR && att < 40);
 
-        states.push({ bx: x, by: y, vx: (Math.random() - 0.5) * 0.04, vy: (Math.random() - 0.5) * 0.025, pf });
-        grp.setAttribute('transform', `translate(${x},${y})`);
+        // scrollSpeed: how many CSS px the orb drifts per px of scroll (creates depth layers)
+        const scrollSpeed = isFg ? 0.15 : isMid ? 0.08 : 0.03;
+        states.push({ bx: x, by: y, vx: (Math.random() - 0.5) * 0.04, vy: (Math.random() - 0.5) * 0.025, pf, scrollSpeed });
+
+        // CSS translate3d — GPU composited; safer on iOS Safari than SVG transform attribute
+        grp.style.transform = `translate3d(${x}px,${y}px,0)`;
       }
 
-      let mx = 0, my = 0, tx = 0, ty = 0;
+      let mx = 0, my = 0, tx = 0, ty = 0, pageScrollY = 0;
+
       if (!reduced) {
         document.addEventListener('mousemove', e => {
           tx =  (e.clientX / window.innerWidth  - 0.5) * 50;
           ty = -(e.clientY / window.innerHeight - 0.5) * 32;
         }, { passive: true });
+
+        // Passive scroll — updates pageScrollY for the RAF loop to consume
+        window.addEventListener('scroll', () => { pageScrollY = window.scrollY; }, { passive: true });
       }
 
       let visible = true;
       new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 }).observe(hero);
 
+      // With reduced motion: orbs are already statically positioned above via style.transform.
+      // No animation loop needed — this correctly respects the user's accessibility preference.
       if (reduced) return;
 
       (function tick() {
@@ -1244,8 +1580,9 @@
           if (s.bx < -120)     s.bx += W + 240;
           if (s.by >  H + 120) s.by -= H + 240;
           if (s.by < -120)     s.by += H + 240;
-          orbGroups[i].setAttribute('transform',
-            `translate(${(s.bx + mx * s.pf).toFixed(1)},${(s.by + my * s.pf).toFixed(1)})`);
+          const ox = s.bx + mx * s.pf;
+          const oy = s.by + my * s.pf + pageScrollY * s.scrollSpeed;
+          orbGroups[i].style.transform = `translate3d(${ox.toFixed(1)}px,${oy.toFixed(1)}px,0)`;
         }
       }());
     }());
