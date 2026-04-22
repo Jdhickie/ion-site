@@ -61,8 +61,7 @@
   <script>
     (function(){
       var s = localStorage.getItem('ion-theme');
-      var p = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', s || p);
+      document.documentElement.setAttribute('data-theme', s || 'light');
     })();
   </script>
 
@@ -1625,7 +1624,7 @@
       });
 
       // Set initial aria-label to match starting theme
-      applyTheme(html.getAttribute('data-theme') || 'dark');
+      applyTheme(html.getAttribute('data-theme') || 'light');
     })();
 
     document.getElementById('audit-cta').addEventListener('click', function () {
