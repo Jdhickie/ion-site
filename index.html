@@ -56,6 +56,16 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Theme: apply before first paint to prevent flash -->
+  <script>
+    (function(){
+      var s = localStorage.getItem('ion-theme');
+      var p = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', s || p);
+    })();
+  </script>
+
   <style>
     /* ================================
        RESET & BASE
@@ -63,18 +73,51 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:        #0a0a0a;
-      --bg-2:      #111111;
-      --bg-3:      #161616;
-      --border:    #1e1e1e;
-      --border-2:  #2c2c2c;
-      --text:      #ebebeb;
-      --text-2:    #9a9a9a;
-      --text-3:    #555555;
-      --accent:    #1D9E75;
-      --accent-a:  rgba(29, 158, 117, 0.1);
-      --accent-b:  rgba(29, 158, 117, 0.18);
-      --font:      'Inter', system-ui, -apple-system, sans-serif;
+      --font:   'Inter', system-ui, -apple-system, sans-serif;
+      --grid-x: 0px;
+      --grid-y: 0px;
+    }
+
+    /* ---- Dark theme (default) ---- */
+    [data-theme="dark"] {
+      --bg:              #0a0a0a;
+      --bg-2:            #111111;
+      --bg-3:            #161616;
+      --border:          #1e1e1e;
+      --border-2:        #2c2c2c;
+      --border-3:        #3e3e3e;
+      --text:            #ebebeb;
+      --text-2:          #9a9a9a;
+      --text-3:          #555555;
+      --accent:          #1D9E75;
+      --accent-rgb:      29, 158, 117;
+      --accent-a:        rgba(29, 158, 117, 0.10);
+      --accent-b:        rgba(29, 158, 117, 0.18);
+      --accent-hover:    #22b987;
+      --nav-scrolled-bg: rgba(10, 10, 10, 0.90);
+      --dot-color:       rgba(255, 255, 255, 0.03);
+      --glow:            rgba(29, 158, 117, 0.45);
+    }
+
+    /* ---- Light theme ---- */
+    [data-theme="light"] {
+      --bg:              #f8faf8;
+      --bg-2:            #eff4f0;
+      --bg-3:            #e4ece6;
+      --border:          #d0ddd3;
+      --border-2:        #b8cbbf;
+      --border-3:        #98b3a0;
+      --text:            #111a13;
+      --text-2:          #4a6052;
+      --text-3:          #788e7f;
+      --accent:          #0891b2;
+      --accent-rgb:      8, 145, 178;
+      --accent-a:        rgba(8, 145, 178, 0.10);
+      --accent-b:        rgba(8, 145, 178, 0.18);
+      --accent-hover:    #0284c7;
+      --nav-scrolled-bg: rgba(248, 250, 248, 0.92);
+      --dot-color:       rgba(0, 0, 0, 0.04);
+      --glow:            rgba(8, 145, 178, 0.40);
     }
 
     html { scroll-behavior: smooth; }
@@ -119,7 +162,7 @@
     }
 
     nav.scrolled {
-      background: rgba(10, 10, 10, 0.9);
+      background: var(--nav-scrolled-bg);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom-color: var(--border);
@@ -172,15 +215,15 @@
     }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover {
-      background: #22b987;
+      background: var(--accent-hover);
       transform: translateY(-1px);
-      box-shadow: 0 6px 24px rgba(29, 158, 117, 0.28);
+      box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.28);
     }
     .btn-outline {
       background: transparent; color: var(--text-2);
       border: 1px solid var(--border-2);
     }
-    .btn-outline:hover { color: var(--text); border-color: #3e3e3e; }
+    .btn-outline:hover { color: var(--text); border-color: var(--border-3); }
 
     /* ================================
        HERO
@@ -201,14 +244,10 @@
     }
 
     /* Dot grid texture — full page, fixed, with parallax via CSS vars */
-    body {
-      --grid-x: 0px;
-      --grid-y: 0px;
-    }
     body::after {
       content: '';
       position: fixed; inset: 0;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
       background-size: 26px 26px;
       background-position: var(--grid-x) var(--grid-y);
       pointer-events: none;
@@ -218,8 +257,8 @@
     .hero-glow {
       position: absolute; inset: 0;
       background:
-        radial-gradient(ellipse 700px 600px at -5% 60%, rgba(29,158,117,0.065) 0%, transparent 70%),
-        radial-gradient(ellipse 500px 400px at 85% 5%, rgba(29,158,117,0.04) 0%, transparent 60%);
+        radial-gradient(ellipse 700px 600px at -5% 60%, rgba(var(--accent-rgb), 0.065) 0%, transparent 70%),
+        radial-gradient(ellipse 500px 400px at 85% 5%, rgba(var(--accent-rgb), 0.04) 0%, transparent 60%);
       pointer-events: none;
       animation: glow-breathe 9s ease-in-out infinite;
     }
@@ -360,7 +399,7 @@
       background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
       opacity: 0; transition: opacity 0.3s;
     }
-    .svc:hover { background: rgba(29, 158, 117, 0.025); }
+    .svc:hover { background: rgba(var(--accent-rgb), 0.025); }
     .svc:hover::after { opacity: 0.55; }
 
     .svc-icon {
@@ -381,7 +420,7 @@
       font-size: 0.69rem; font-weight: 500;
       padding: 0.18rem 0.55rem; border-radius: 4px;
       background: var(--accent-a); color: var(--accent);
-      border: 1px solid rgba(29, 158, 117, 0.15);
+      border: 1px solid rgba(var(--accent-rgb), 0.15);
     }
 
     /* ================================
@@ -457,7 +496,7 @@
     .step-num {
       font-size: 3.75rem; font-weight: 700;
       letter-spacing: -0.04em;
-      color: rgba(29, 158, 117, 0.1);
+      color: rgba(var(--accent-rgb), 0.1);
       line-height: 1; margin-bottom: 1.25rem;
     }
     .step h3 { font-size: 1.05rem; margin-bottom: 0.7rem; }
@@ -481,7 +520,7 @@
     .ci { display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; color: var(--text-2); }
     .ci-icon {
       width: 30px; height: 30px; border-radius: 6px;
-      background: var(--accent-a); border: 1px solid rgba(29,158,117,0.15);
+      background: var(--accent-a); border: 1px solid rgba(var(--accent-rgb), 0.15);
       display: flex; align-items: center; justify-content: center;
       color: var(--accent); flex-shrink: 0;
     }
@@ -507,7 +546,7 @@
     input::placeholder, textarea::placeholder { color: var(--text-3); }
     input:focus, select:focus, textarea:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(29, 158, 117, 0.07);
+      box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.07);
     }
 
     select {
@@ -652,9 +691,9 @@
     .sys-chip {
       font-size: 0.6rem; font-weight: 500;
       padding: 0.12rem 0.4rem; border-radius: 3px;
-      background: rgba(29,158,117,0.07);
+      background: rgba(var(--accent-rgb), 0.07);
       color: var(--text-3);
-      border: 1px solid rgba(29,158,117,0.13);
+      border: 1px solid rgba(var(--accent-rgb), 0.13);
     }
 
     .sys-price {
@@ -733,8 +772,8 @@
       text-align: center; white-space: nowrap;
     }
     .mfl-node.trigger {
-      background: rgba(29,158,117,0.15); color: var(--accent);
-      border: 1px solid rgba(29,158,117,0.3);
+      background: rgba(var(--accent-rgb), 0.15); color: var(--accent);
+      border: 1px solid rgba(var(--accent-rgb), 0.3);
     }
     .mfl-node.action {
       background: var(--bg-3); color: var(--text-2);
@@ -882,6 +921,101 @@
     @media (max-width: 560px) {
       .process-grid { grid-template-columns: 1fr; }
     }
+
+    /* ================================
+       THEME TOGGLE BUTTON
+       ================================ */
+    .nav-end {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 0.3rem 0.35rem;
+      color: var(--text-3);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s, border-color 0.2s;
+      line-height: 1;
+    }
+    .theme-toggle:hover {
+      color: var(--text-2);
+      border-color: var(--border-3);
+    }
+
+    /* Show sun in dark mode (click → go light), moon in light mode (click → go dark) */
+    [data-theme="dark"]  .icon-moon { display: none; }
+    [data-theme="light"] .icon-sun  { display: none; }
+
+    /* ================================
+       SELECTION HIGHLIGHT
+       ================================ */
+    ::selection {
+      background: rgba(var(--accent-rgb), 0.22);
+      color: var(--text);
+    }
+
+    /* ================================
+       NEON UNDERGLOW — NAV
+       ================================ */
+    .nav-menu a {
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+
+    /* Active: persistent dim glow */
+    .nav-menu a.active {
+      text-shadow: 0 0 14px rgba(var(--accent-rgb), 0.35);
+    }
+
+    /* Hover: brighter glow — pointer devices only */
+    @media (hover: hover) {
+      .nav-menu a:hover {
+        text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.6);
+      }
+    }
+
+    /* ================================
+       NEON UNDERGLOW — SYSTEM + STAGE CARDS
+       ================================ */
+    @media (hover: hover) {
+      .sys:hover {
+        border-color: rgba(var(--accent-rgb), 0.35);
+        box-shadow:
+          0 0 0 1px rgba(var(--accent-rgb), 0.18),
+          0 8px 32px rgba(var(--accent-rgb), 0.14),
+          0 0 48px rgba(var(--accent-rgb), 0.07);
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+      .stage:hover {
+        border-color: rgba(var(--accent-rgb), 0.35);
+        box-shadow:
+          0 0 0 1px rgba(var(--accent-rgb), 0.18),
+          0 8px 32px rgba(var(--accent-rgb), 0.14),
+          0 0 48px rgba(var(--accent-rgb), 0.07);
+        transition: border-color 0.2s, box-shadow 0.2s;
+      }
+    }
+
+    /* ================================
+       LIGHT MODE: ORB FILTER
+       ================================ */
+    /* Shift green orbs ~28° toward cyan, boost brightness for light bg */
+    [data-theme="light"] #ion-particles {
+      filter: hue-rotate(28deg) brightness(2.2) saturate(0.55);
+      opacity: 0.28;
+    }
+
+    /* Light mode: select chevron darkened for better contrast */
+    [data-theme="light"] select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23444' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    }
+
+    /* Light mode: transition for theme switch */
+    body, nav, .sys, .stage, .proj, .about-card, .audit-banner, .avail-badge {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
   </style>
 </head>
 <body>
@@ -898,10 +1032,26 @@
       <li><a href="#process">Process</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="#contact" class="nav-cta">
-      Get in touch
-      <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
+    <div class="nav-end">
+      <a href="#contact" class="nav-cta">
+        Get in touch
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light theme">
+        <!-- Sun: visible in dark mode -->
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon: visible in light mode -->
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
   </nav>
 
   <main>
@@ -1442,6 +1592,34 @@
     // ================================
     // AUDIT CTA PRE-FILL
     // ================================
+    // ================================
+    // THEME TOGGLE
+    // ================================
+    (function () {
+      var html = document.documentElement;
+      var btn  = document.getElementById('theme-toggle');
+
+      function applyTheme(t) {
+        html.setAttribute('data-theme', t);
+        localStorage.setItem('ion-theme', t);
+        btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      }
+
+      btn.addEventListener('click', function () {
+        applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+
+      // Sync with OS preference only when no manual override is stored
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('ion-theme')) {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+
+      // Set initial aria-label to match starting theme
+      applyTheme(html.getAttribute('data-theme') || 'dark');
+    })();
+
     document.getElementById('audit-cta').addEventListener('click', function () {
       setTimeout(function () {
         var sel = document.getElementById('fservice');
