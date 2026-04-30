@@ -55,7 +55,7 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Theme: apply before first paint to prevent flash -->
   <script>
@@ -79,6 +79,7 @@
 
     /* ---- Dark theme (default) ---- */
     [data-theme="dark"] {
+      --font-display:    'Bebas Neue', sans-serif;
       --bg:              #0a0a0a;
       --bg-2:            #111111;
       --bg-3:            #161616;
@@ -100,6 +101,7 @@
 
     /* ---- Light theme ---- */
     [data-theme="light"] {
+      --font-display:    'Bebas Neue', sans-serif;
       --bg:              #f8faf8;
       --bg-2:            #eff4f0;
       --bg-3:            #e4ece6;
@@ -282,9 +284,11 @@
     .eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent); }
 
     .hero-title {
-      font-size: clamp(2.8rem, 6vw, 4.75rem);
-      font-weight: 700; letter-spacing: -0.04em;
-      line-height: 1.08; margin-bottom: 1.5rem;
+      font-family: var(--font-display);
+      font-size: clamp(64px, 9vw, 140px);
+      font-weight: 400; letter-spacing: 0.01em;
+      line-height: 0.92; text-transform: uppercase;
+      margin-bottom: 1.5rem;
     }
     .hero-title .hi { color: var(--accent); }
 
@@ -374,7 +378,13 @@
     }
     .sh-eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--accent); }
 
-    .sh-title { font-size: clamp(1.75rem, 3.5vw, 2.5rem); margin-bottom: 0.9rem; }
+    .sh-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 400; letter-spacing: 0.01em;
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+    }
 
     .sh-desc {
       color: var(--text-2); font-size: 0.975rem;
@@ -517,7 +527,7 @@
       gap: 6rem; align-items: start;
     }
 
-    .contact-left h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); margin-bottom: 1rem; }
+    .contact-left h2 { font-family: var(--font-display); font-size: clamp(36px, 5vw, 72px); font-weight: 400; letter-spacing: 0.01em; text-transform: uppercase; margin-bottom: 1rem; }
     .contact-left p {
       color: var(--text-2); font-size: 0.95rem;
       line-height: 1.75; font-weight: 300; margin-bottom: 2.5rem;
@@ -1023,9 +1033,242 @@
     body, nav, .sys, .stage, .proj, .about-card, .audit-banner, .avail-badge {
       transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
     }
+
+    /* ================================
+       CUSTOM CURSOR
+       ================================ */
+    @media (hover: hover) {
+      body { cursor: none; }
+      a, button, select, input, textarea, label { cursor: none; }
+    }
+    @media (hover: none) {
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    .cursor {
+      position: fixed;
+      left: 0; top: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(var(--cx, -100px), var(--cy, -100px)) translate(-50%, -50%);
+      will-change: transform;
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      left: 0; top: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--accent-rgb), 0.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(var(--rx, -100px), var(--ry, -100px)) translate(-50%, -50%);
+      will-change: transform;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    }
+
+    body.cursor-hover .cursor  { width: 5px; height: 5px; }
+    body.cursor-hover .cursor-ring { width: 48px; height: 48px; }
+
+    /* ================================
+       TICKER STRIP
+       ================================ */
+    .ticker-wrap {
+      overflow: hidden;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--nav-scrolled-bg);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      padding: 0.6rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ticker-track {
+      display: flex;
+      width: max-content;
+      animation: ticker-scroll 32s linear infinite;
+    }
+
+    .ticker-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 1rem;
+      white-space: nowrap;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text-2);
+      padding: 0 1.25rem;
+    }
+
+    .ticker-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--accent);
+      flex-shrink: 0;
+    }
+
+    @keyframes ticker-scroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-track { animation-play-state: paused; }
+    }
+
+    /* ================================
+       STATS STRIP
+       ================================ */
+    .stats-strip {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg);
+      position: relative;
+      z-index: 1;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .stat-col {
+      padding: 3rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      border-right: 1px solid var(--border);
+    }
+
+    .stat-col:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 72px;
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: 0.01em;
+    }
+
+    .stat-suffix { color: var(--accent); }
+
+    .stat-label {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      font-weight: 500;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-col:nth-child(2) { border-right: none; }
+      .stat-col:nth-child(3) { border-right: 1px solid var(--border); border-top: 1px solid var(--border); }
+      .stat-col:nth-child(4) { border-top: 1px solid var(--border); }
+    }
+
+    @media (max-width: 560px) {
+      .stat-number { font-size: 56px; }
+      .stat-col { padding: 2rem 1.25rem; }
+    }
+
+    /* ================================
+       MANIFESTO SECTION
+       ================================ */
+    #about { background: var(--bg); }
+
+    .manifesto-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.55rem;
+      font-size: 0.7rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: 0.15em;
+      color: var(--accent); margin-bottom: 1.5rem;
+    }
+    .manifesto-eyebrow::before { content: ''; width: 14px; height: 1px; background: var(--accent); }
+
+    .manifesto-headline {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 68px);
+      line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: 0.01em;
+      margin-bottom: 2.5rem;
+      font-weight: 400;
+    }
+
+    .manifesto-body {
+      font-size: 15px;
+      line-height: 1.8;
+      color: var(--text-2);
+      max-width: 560px;
+      border-left: 2px solid var(--accent);
+      padding-left: 24px;
+      font-weight: 300;
+    }
+
+    /* ================================
+       CARD RESTYLE — SYS NUMBERS
+       ================================ */
+    .sys-num {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    /* sys background: bg-2 default → bg-3 on hover */
+    .sys { background: var(--bg-2); }
+
+    @media (hover: hover) {
+      .sys:hover { background: var(--bg-3); }
+    }
+
+    /* stage-num: restyle from grey pill to bare accent text */
+    .stage-num {
+      font-size: 11px !important;
+      font-weight: 600 !important;
+      letter-spacing: 0.2em !important;
+      text-transform: uppercase;
+      color: var(--accent) !important;
+      background: transparent !important;
+      border: none !important;
+      padding: 0 !important;
+    }
+
+    @media (hover: hover) {
+      .stage:hover { background: var(--bg-3); }
+    }
+
+    /* ================================
+       PARTICLE CANVAS
+       ================================ */
+    #ion-particles-fg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- Particle canvas: fixed, full viewport, z-index 1, below content -->
+  <canvas id="ion-particles-fg" aria-hidden="true"></canvas>
 
   <!-- ================================
        NAVIGATION
@@ -1101,6 +1344,61 @@
   </section>
 
   <!-- ================================
+       TICKER STRIP
+       ================================ -->
+  <div class="ticker-wrap" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Software<span class="ticker-dot"></span></span>
+      <span class="ticker-item">AI Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">SaaS Products<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Workflow Automation<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Lead Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Extraction Agents<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Knowledge Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Owned Infrastructure<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Dublin, Ireland<span class="ticker-dot"></span></span>
+      <span class="ticker-item">No Lock-In<span class="ticker-dot"></span></span>
+      <span class="ticker-item">No Black Boxes<span class="ticker-dot"></span></span>
+      <!-- Duplicate for seamless loop -->
+      <span class="ticker-item">Software<span class="ticker-dot"></span></span>
+      <span class="ticker-item">AI Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">SaaS Products<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Workflow Automation<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Lead Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Extraction Agents<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Knowledge Systems<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Owned Infrastructure<span class="ticker-dot"></span></span>
+      <span class="ticker-item">Dublin, Ireland<span class="ticker-dot"></span></span>
+      <span class="ticker-item">No Lock-In<span class="ticker-dot"></span></span>
+      <span class="ticker-item">No Black Boxes<span class="ticker-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- ================================
+       STATS STRIP
+       ================================ -->
+  <div class="stats-strip">
+    <div class="stats-grid">
+      <div class="stat-col" data-r data-d="1">
+        <div class="stat-number">232<span class="stat-suffix">+</span></div>
+        <div class="stat-label">Meals managed weekly</div>
+      </div>
+      <div class="stat-col" data-r data-d="2">
+        <div class="stat-number">100<span class="stat-suffix">%</span></div>
+        <div class="stat-label">Client-owned code</div>
+      </div>
+      <div class="stat-col" data-r data-d="3">
+        <div class="stat-number">5<span class="stat-suffix">+</span></div>
+        <div class="stat-label">Systems in production</div>
+      </div>
+      <div class="stat-col" data-r data-d="4">
+        <div class="stat-number">4–6<span class="stat-suffix">wk</span></div>
+        <div class="stat-label">Start to handoff</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================================
        PROBLEM
        ================================ -->
   <section id="problem">
@@ -1136,6 +1434,7 @@
 
         <!-- 1 — Lead Systems -->
         <div class="sys" data-r data-d="1">
+          <div class="sys-num">01</div>
           <div class="sys-name">Lead Systems</div>
           <div class="sys-tagline">Every form, call, or DM gets an intelligent reply before it goes cold.</div>
           <div class="sys-desc">AI-drafted responses to inbound leads. Captures, classifies, replies, and logs — automatically. Running live on íon.ie right now.</div>
@@ -1170,6 +1469,7 @@
 
         <!-- 2 — Ops Dashboards -->
         <div class="sys" data-r data-d="2">
+          <div class="sys-num">02</div>
           <div class="sys-name">Ops Dashboards</div>
           <div class="sys-tagline">One screen. Live data. The numbers that actually run your business.</div>
           <div class="sys-desc">Persistent dashboards connected to your tools, refreshing on open. Replaces two or three reporting SaaS subscriptions with something you own.</div>
@@ -1204,6 +1504,7 @@
 
         <!-- 3 — Extraction Agents -->
         <div class="sys" data-r data-d="3">
+          <div class="sys-num">03</div>
           <div class="sys-name">Extraction Agents</div>
           <div class="sys-tagline">Invoices, contracts, grant briefs — turned into clean, structured data.</div>
           <div class="sys-desc">Unstructured documents in, structured records in your database out. Eliminates manual data entry and the errors that come with it.</div>
@@ -1238,6 +1539,7 @@
 
         <!-- 4 — Workflow Automation (row 2, centered) -->
         <div class="sys" data-r data-d="1">
+          <div class="sys-num">04</div>
           <div class="sys-name">Workflow Automation</div>
           <div class="sys-tagline">The follow-ups and handoffs your team does manually — handled.</div>
           <div class="sys-desc">n8n + Claude replacing Zapier sprawl with owned, auditable workflows. You see every step, own the logic, and can change it any time.</div>
@@ -1262,6 +1564,7 @@
 
         <!-- 5 — Knowledge Systems (row 2, centered) -->
         <div class="sys" data-r data-d="2">
+          <div class="sys-num">05</div>
           <div class="sys-name">Knowledge Systems</div>
           <div class="sys-tagline">Your team stops asking the same questions. The docs already have the answers.</div>
           <div class="sys-desc">RAG pipelines over your internal docs, SOPs, and support history. Ask in plain English, get answers from your own knowledge base.</div>
@@ -1382,6 +1685,23 @@
   </section>
 
   <!-- ================================
+       MANIFESTO / ABOUT
+       ================================ -->
+  <section id="about">
+    <div class="container">
+      <div class="manifesto-eyebrow" data-r>What We Believe</div>
+      <h2 class="manifesto-headline" data-r data-d="1">
+        We build <span class="hi">systems</span> that<br>
+        make your operation<br>
+        <span class="hi">harder to ignore.</span>
+      </h2>
+      <p class="manifesto-body" data-r data-d="2">
+        Based in Dublin, Ireland. One operator — built with the speed and precision of a team. No overhead. No agency markup. Just systems that work and code you own.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================
        PROJECTS
        ================================ -->
   <section id="projects">
@@ -1447,58 +1767,6 @@
             <span class="tag">Maps</span>
             <span class="tag">Community Data</span>
           </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================
-       ABOUT
-       ================================ -->
-  <section id="about">
-    <div class="container">
-      <div class="sh" data-r>
-        <div class="sh-eyebrow">About</div>
-        <h2 class="sh-title">The founder</h2>
-      </div>
-      <div class="about-card" data-r data-d="1">
-        <div class="about-avatar"></div>
-        <div class="about-placeholder">
-          <span>Founder profile coming soon.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ================================
-       HOW IT WORKS
-       ================================ -->
-  <section id="how">
-    <div class="container">
-      <div class="sh" data-r>
-        <div class="sh-eyebrow">The process</div>
-        <h2 class="sh-title">How it works</h2>
-        <p class="sh-desc">No agency overhead, no account managers, no layers of management. Direct, efficient, accountable.</p>
-      </div>
-      <div class="steps">
-
-        <div class="step" data-r data-d="1">
-          <div class="step-num">01</div>
-          <h3>Discovery call</h3>
-          <p>A focused conversation about your business, your problem, and what a good outcome looks like. No lengthy briefs or RFPs — just a direct conversation to understand what you actually need.</p>
-        </div>
-
-        <div class="step" data-r data-d="2">
-          <div class="step-num">02</div>
-          <h3>Scoped proposal</h3>
-          <p>A clear, fixed-scope proposal with deliverables, timeline, and pricing. You know exactly what you're getting before a single line of code is written.</p>
-        </div>
-
-        <div class="step" data-r data-d="3">
-          <div class="step-num">03</div>
-          <h3>Build &amp; ship</h3>
-          <p>Iterative delivery with regular check-ins. Working software in your hands early and often — not a big reveal at the end of a long project.</p>
         </div>
 
       </div>
@@ -1712,6 +1980,43 @@
     }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
 
     document.querySelectorAll('[data-r]').forEach(el => revealObs.observe(el));
+
+    // ================================
+    // CUSTOM CURSOR
+    // ================================
+    (function () {
+      const dot  = document.querySelector('.cursor');
+      const ring = document.querySelector('.cursor-ring');
+      if (!dot || !ring || window.matchMedia('(hover: none)').matches) return;
+
+      let mx = -200, my = -200;
+      let rx = -200, ry = -200;
+      let rafC;
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX;
+        my = e.clientY;
+        dot.style.setProperty('--cx', mx + 'px');
+        dot.style.setProperty('--cy', my + 'px');
+        if (!rafC) rafC = requestAnimationFrame(lerpRing);
+      }, { passive: true });
+
+      function lerpRing() {
+        rafC = null;
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.setProperty('--rx', rx.toFixed(2) + 'px');
+        ring.style.setProperty('--ry', ry.toFixed(2) + 'px');
+        if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) {
+          rafC = requestAnimationFrame(lerpRing);
+        }
+      }
+
+      document.querySelectorAll('a, button, [role="button"], select, input, textarea').forEach(function (el) {
+        el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-hover'); }, { passive: true });
+        el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-hover'); }, { passive: true });
+      });
+    })();
 
     // ================================
     // CONTACT FORM
@@ -1942,8 +2247,62 @@
       // No animation loop needed — this correctly respects the user's accessibility preference.
       if (reduced) return;
 
+      // ---- Particle canvas (merged into orb RAF) ----
+      const pfCanvas = document.getElementById('ion-particles-fg');
+      let pfCtx = null;
+      const PF_MOBILE     = window.innerWidth < 768;
+      const PF_COUNT      = PF_MOBILE ? 40 : 110;
+      const pfParticles   = [];
+      let   pfFrameCount  = 0;
+      let   pfAccentRgb   = '';
+
+      if (pfCanvas) {
+        pfCtx = pfCanvas.getContext('2d');
+        pfCanvas.width  = window.innerWidth;
+        pfCanvas.height = window.innerHeight;
+        pfAccentRgb = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
+
+        window.addEventListener('resize', () => {
+          pfCanvas.width  = window.innerWidth;
+          pfCanvas.height = window.innerHeight;
+        }, { passive: true });
+
+        for (let i = 0; i < PF_COUNT; i++) {
+          pfParticles.push({
+            x:  Math.random() * pfCanvas.width,
+            y:  Math.random() * pfCanvas.height,
+            vx: (Math.random() - 0.5) * 0.3,
+            vy: (Math.random() - 0.5) * 0.3,
+            r:  PF_MOBILE ? 1 : (Math.random() < 0.5 ? 1 : 2),
+          });
+        }
+      }
+
+      function drawParticles() {
+        if (!pfCtx) return;
+        if (++pfFrameCount % 60 === 0) {
+          pfAccentRgb = getComputedStyle(document.documentElement).getPropertyValue('--accent-rgb').trim();
+        }
+        const cw = pfCanvas.width, ch = pfCanvas.height;
+        pfCtx.clearRect(0, 0, cw, ch);
+        pfCtx.fillStyle = `rgba(${pfAccentRgb}, 0.18)`;
+        for (const p of pfParticles) {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0)  p.x = cw;
+          if (p.x > cw) p.x = 0;
+          if (p.y < 0)  p.y = ch;
+          if (p.y > ch) p.y = 0;
+          pfCtx.beginPath();
+          pfCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          pfCtx.fill();
+        }
+      }
+      // ---- End particle setup ----
+
       (function tick() {
         requestAnimationFrame(tick);
+        drawParticles();
         if (!visible) return;
         mx += (tx - mx) * 0.04;
         my += (ty - my) * 0.04;
