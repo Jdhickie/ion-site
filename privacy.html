@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en-IE">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Primary meta -->
+  <title>Privacy Policy — Íon</title>
+  <meta name="description" content="Privacy policy for íon.ie — how Íon collects, uses, and protects information you submit through the contact form.">
+  <meta name="keywords" content="software automation Ireland, AI automation consultant, software consultancy Ireland, owned automation systems, process automation Ireland, workflow automation, John Daniel Hickie">
+  <meta name="author" content="John Daniel Hickie">
+  <link rel="canonical" href="https://íon.ie/privacy.html">
+  <meta name="robots" content="index, follow">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="Íon">
+  <meta property="og:locale"      content="en_IE">
+  <meta property="og:url"         content="https://xn--on-mja.ie/">
+  <meta property="og:title"       content="Íon — AI systems your business owns">
+  <meta property="og:description" content="Custom-built AI and automation systems for Irish businesses — you own the code, the data, and the workflow. No lock-in, no black boxes.">
+  <meta property="og:image"       content="https://xn--on-mja.ie/og-image.png">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Íon — AI systems your business owns">
+  <meta name="twitter:description" content="Custom-built AI and automation systems for Irish businesses — you own the code, the data, and the workflow. No lock-in, no black boxes.">
+  <meta name="twitter:image"       content="https://xn--on-mja.ie/og-image.png">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "Íon",
+    "url": "https://íon.ie",
+    "description": "Custom-built AI and automation systems for Irish businesses. We design, deploy, and hand over the keys — code, data, and workflows fully owned by you. No lock-in, no black boxes.",
+    "areaServed": {
+      "@type": "Country",
+      "name": "Ireland"
+    },
+    "founder": {
+      "@type": "Person",
+      "name": "John Daniel Hickie"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "customer enquiries",
+      "url": "https://íon.ie/#contact"
+    },
+    "sameAs": []
+  }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Theme: apply before first paint to prevent flash -->
+  <script>
+    (function(){
+      var s = localStorage.getItem('ion-theme');
+      document.documentElement.setAttribute('data-theme', s || 'light');
+    })();
+  </script>
+
+  <style>
+    /* ================================
+       RESET & BASE
+       ================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font:   'Inter', system-ui, -apple-system, sans-serif;
+      --grid-x: 0px;
+      --grid-y: 0px;
+    }
+
+    /* ---- Dark theme (default) ---- */
+    [data-theme="dark"] {
+      --font-display:    'Bebas Neue', sans-serif;
+      --bg:              #0a0a0a;
+      --bg-2:            #111111;
+      --bg-3:            #161616;
+      --border:          #1e1e1e;
+      --border-2:        #2c2c2c;
+      --border-3:        #3e3e3e;
+      --text:            #ebebeb;
+      --text-2:          #9a9a9a;
+      --text-3:          #555555;
+      --accent:          #1D9E75;
+      --accent-rgb:      29, 158, 117;
+      --accent-a:        rgba(29, 158, 117, 0.10);
+      --accent-b:        rgba(29, 158, 117, 0.18);
+      --accent-hover:    #22b987;
+      --nav-scrolled-bg: rgba(10, 10, 10, 0.90);
+      --dot-color:       rgba(255, 255, 255, 0.03);
+      --glow:            rgba(29, 158, 117, 0.45);
+    }
+
+    /* ---- Light theme ---- */
+    [data-theme="light"] {
+      --font-display:    'Bebas Neue', sans-serif;
+      --bg:              #f8faf8;
+      --bg-2:            #eff4f0;
+      --bg-3:            #e4ece6;
+      --border:          #d0ddd3;
+      --border-2:        #b8cbbf;
+      --border-3:        #98b3a0;
+      --text:            #111a13;
+      --text-2:          #4a6052;
+      --text-3:          #788e7f;
+      --accent:          #0891b2;
+      --accent-rgb:      8, 145, 178;
+      --accent-a:        rgba(8, 145, 178, 0.10);
+      --accent-b:        rgba(8, 145, 178, 0.18);
+      --accent-hover:    #0284c7;
+      --nav-scrolled-bg: rgba(248, 250, 248, 0.92);
+      --dot-color:       rgba(0, 0, 0, 0.04);
+      --glow:            rgba(8, 145, 178, 0.40);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Top accent bar */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent 0%, var(--accent) 40%, transparent 100%);
+      z-index: 300;
+      pointer-events: none;
+    }
+
+    h1, h2, h3 { line-height: 1.15; font-weight: 600; letter-spacing: -0.025em; }
+
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 7rem 0; position: relative; z-index: 1; }
+
+    /* ================================
+       NAVIGATION
+       ================================ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 200;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      transition: background 0.35s, border-color 0.35s;
+      border-bottom: 1px solid transparent;
+    }
+
+    nav.scrolled {
+      background: var(--nav-scrolled-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-logo {
+      font-size: 1.2rem; font-weight: 700;
+      letter-spacing: -0.04em;
+      color: var(--text); text-decoration: none;
+    }
+    .nav-logo .a { color: var(--accent); }
+
+    .nav-menu { list-style: none; display: flex; gap: 2.5rem; }
+    .nav-menu a {
+      font-size: 0.875rem; color: var(--text-2);
+      text-decoration: none; transition: color 0.2s;
+      position: relative;
+    }
+    .nav-menu a::after {
+      content: ''; position: absolute;
+      bottom: -3px; left: 0;
+      width: 0; height: 1px;
+      background: var(--accent);
+      transition: width 0.25s;
+    }
+    .nav-menu a:hover, .nav-menu a.active { color: var(--text); }
+    .nav-menu a:hover::after, .nav-menu a.active::after { width: 100%; }
+
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.8rem; font-weight: 500;
+      color: var(--accent); text-decoration: none;
+      padding: 0.45rem 0.9rem;
+      border: 1px solid var(--accent-b); border-radius: 20px;
+      transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--accent-a); }
+
+    /* ================================
+       BUTTONS
+       ================================ */
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.45rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 6px;
+      font-size: 0.875rem; font-weight: 500;
+      font-family: var(--font);
+      text-decoration: none; cursor: pointer; border: none;
+      transition: all 0.2s; line-height: 1;
+    }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.28);
+    }
+    .btn-outline {
+      background: transparent; color: var(--text-2);
+      border: 1px solid var(--border-2);
+    }
+    .btn-outline:hover { color: var(--text); border-color: var(--border-3); }
+
+    /* Dot grid texture — full page, fixed, with parallax via CSS vars */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: radial-gradient(var(--dot-color) 1px, transparent 1px);
+      background-size: 26px 26px;
+      background-position: var(--grid-x) var(--grid-y);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ================================
+       REVEAL ANIMATIONS
+       ================================ */
+    [data-r] {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    [data-r].in { opacity: 1; transform: translateY(0); }
+
+    [data-d="1"] { transition-delay: 0.1s; }
+    [data-d="2"] { transition-delay: 0.2s; }
+    [data-d="3"] { transition-delay: 0.3s; }
+    [data-d="4"] { transition-delay: 0.45s; }
+
+    /* ================================
+       FOOTER
+       ================================ */
+    footer {
+      padding: 1.75rem 2.5rem;
+      border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 0.8rem; color: var(--text-3);
+      position: relative; z-index: 1;
+    }
+    .footer-logo { font-weight: 600; color: var(--text-2); letter-spacing: -0.02em; font-size: 0.95rem; }
+    .footer-logo .a { color: var(--accent); }
+    .footer-right { display: flex; align-items: center; gap: 0.5rem; }
+    .fdot { width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+    .footer-link {
+      color: var(--text-3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--text-2); }
+
+    /* ================================
+       THEME TOGGLE BUTTON
+       ================================ */
+    .nav-end {
+      display: flex; align-items: center; gap: 0.75rem;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--border-2);
+      border-radius: 6px;
+      padding: 0.3rem 0.35rem;
+      color: var(--text-3);
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: color 0.2s, border-color 0.2s;
+      line-height: 1;
+    }
+    .theme-toggle:hover {
+      color: var(--text-2);
+      border-color: var(--border-3);
+    }
+
+    /* Show sun in dark mode (click → go light), moon in light mode (click → go dark) */
+    [data-theme="dark"]  .icon-moon { display: none; }
+    [data-theme="light"] .icon-sun  { display: none; }
+
+    /* ================================
+       SELECTION HIGHLIGHT
+       ================================ */
+    ::selection {
+      background: rgba(var(--accent-rgb), 0.22);
+      color: var(--text);
+    }
+
+    /* ================================
+       NEON UNDERGLOW — NAV
+       ================================ */
+    .nav-menu a {
+      transition: color 0.2s, text-shadow 0.2s;
+    }
+
+    @media (hover: hover) {
+      .nav-menu a:hover {
+        text-shadow: 0 0 18px rgba(var(--accent-rgb), 0.6);
+      }
+    }
+
+    /* ================================
+       LIGHT MODE TRANSITION
+       ================================ */
+    body, nav {
+      transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* ================================
+       CUSTOM CURSOR
+       ================================ */
+    @media (hover: hover) {
+      body { cursor: none; }
+      a, button, select, input, textarea, label { cursor: none; }
+    }
+    @media (hover: none) {
+      .cursor, .cursor-ring { display: none; }
+    }
+
+    .cursor {
+      position: fixed;
+      left: 0; top: 0;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(var(--cx, -100px), var(--cy, -100px)) translate(-50%, -50%);
+      will-change: transform;
+      transition: width 0.15s ease, height 0.15s ease;
+    }
+
+    .cursor-ring {
+      position: fixed;
+      left: 0; top: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid rgba(var(--accent-rgb), 0.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(var(--rx, -100px), var(--ry, -100px)) translate(-50%, -50%);
+      will-change: transform;
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+    }
+
+    body.cursor-hover .cursor  { width: 5px; height: 5px; }
+    body.cursor-hover .cursor-ring { width: 48px; height: 48px; }
+
+    /* ================================
+       RESPONSIVE
+       ================================ */
+    @media (max-width: 560px) {
+      .nav-menu { display: none; }
+      footer { flex-direction: column; gap: 0.75rem; text-align: center; }
+    }
+
+    /* ================================
+       PRIVACY PAGE
+       ================================ */
+    .privacy-content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: calc(64px + 4rem) 2rem 120px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .privacy-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6vw, 64px);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      line-height: 1.05;
+      margin-bottom: 0.5rem;
+    }
+
+    .privacy-updated {
+      font-size: 0.8rem;
+      color: var(--text-3);
+      margin-bottom: 2.5rem;
+    }
+
+    .privacy-content h2 {
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.015em;
+      margin-top: 2.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .privacy-content p {
+      color: var(--text-2);
+      font-size: 0.925rem;
+      line-height: 1.75;
+      font-weight: 300;
+      margin-bottom: 0.9rem;
+    }
+
+    .privacy-content ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 0.9rem;
+    }
+
+    .privacy-content ul li {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      font-size: 0.925rem;
+      color: var(--text-2);
+      line-height: 1.65;
+      font-weight: 300;
+      padding: 0.15rem 0;
+    }
+
+    .privacy-content ul li::before {
+      content: '—';
+      color: var(--accent);
+      flex-shrink: 0;
+      font-weight: 500;
+    }
+
+    .privacy-content a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    .privacy-content a:hover {
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .privacy-controller {
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.825rem !important;
+      color: var(--text-3) !important;
+      line-height: 1.8 !important;
+    }
+
+    @media (max-width: 560px) {
+      .privacy-content {
+        padding: calc(64px + 2.5rem) 1.25rem 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Custom cursor -->
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="cursor-ring" aria-hidden="true"></div>
+
+  <!-- ================================
+       NAVIGATION
+       ================================ -->
+  <nav id="nav">
+    <a href="/" class="nav-logo">Í<span class="a">on</span></a>
+    <ul class="nav-menu">
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/#projects">Projects</a></li>
+      <li><a href="/#about">About</a></li>
+      <li><a href="/#process">Process</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <div class="nav-end">
+      <a href="/#contact" class="nav-cta">
+        Get in touch
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <button class="theme-toggle" id="theme-toggle" aria-label="Switch to light theme">
+        <!-- Sun: visible in dark mode -->
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <!-- Moon: visible in light mode -->
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="privacy-content">
+
+      <h1 data-r>Privacy Policy</h1>
+      <p class="privacy-updated" data-r data-d="1">Last updated: 18 May 2026</p>
+
+      <p data-r data-d="2">This privacy policy explains how Íon ("we", "us") collects, uses, and protects information you provide through íon.ie.</p>
+      <p data-r data-d="2">Íon is operated by John Daniel Hickie, a sole trader based in Ireland. For any privacy-related questions, contact: <a href="mailto:ionmediaeire@gmail.com">ionmediaeire@gmail.com</a></p>
+
+      <h2 data-r>What we collect</h2>
+      <p data-r>When you submit the contact form on íon.ie, we collect:</p>
+      <ul data-r>
+        <li>Your name</li>
+        <li>Your email address</li>
+        <li>The service you're interested in (if selected)</li>
+        <li>The message you write</li>
+        <li>The time you submitted the form</li>
+      </ul>
+      <p data-r>We do not use tracking cookies or analytics on íon.ie.</p>
+
+      <h2 data-r>Why we collect it</h2>
+      <p data-r>We use this information solely to:</p>
+      <ul data-r>
+        <li>Respond to your enquiry</li>
+        <li>Provide quotes or proposals if you ask for them</li>
+        <li>Maintain a record of past enquiries</li>
+      </ul>
+      <p data-r>We do not use your data for marketing without explicit opt-in. We do not sell or share your data with third parties for advertising.</p>
+
+      <h2 data-r>Where it's stored</h2>
+      <p data-r>Your submission is stored in two places:</p>
+      <ul data-r>
+        <li>Supabase — our database provider, hosted in the EU</li>
+        <li>Resend — our email delivery service, which sends the reply on our behalf</li>
+      </ul>
+      <p data-r>Both providers are GDPR-compliant. The data does not leave their systems for any other purpose.</p>
+
+      <h2 data-r>How long we keep it</h2>
+      <p data-r>We retain enquiry data for 12 months from your last contact with us. After that, it is deleted.</p>
+      <p data-r>If you'd like your data deleted sooner, email <a href="mailto:ionmediaeire@gmail.com">ionmediaeire@gmail.com</a> and we'll remove it within 30 days.</p>
+
+      <h2 data-r>Your rights under GDPR</h2>
+      <p data-r>You have the right to:</p>
+      <ul data-r>
+        <li>Request a copy of the data we hold about you</li>
+        <li>Ask us to correct any inaccurate data</li>
+        <li>Ask us to delete your data</li>
+        <li>Withdraw consent at any time</li>
+        <li>Lodge a complaint with the Data Protection Commission of Ireland (<a href="https://www.dataprotection.ie" target="_blank" rel="noopener">dataprotection.ie</a>)</li>
+      </ul>
+      <p data-r>To exercise any of these rights, email <a href="mailto:ionmediaeire@gmail.com">ionmediaeire@gmail.com</a>.</p>
+
+      <h2 data-r>AI-assisted responses</h2>
+      <p data-r>Replies to your enquiry may be drafted with the assistance of Claude, an AI model developed by Anthropic. Your message is sent to Anthropic's API to generate a draft reply, which is reviewed before sending. Anthropic does not retain this data for training purposes.</p>
+
+      <h2 data-r>Changes to this policy</h2>
+      <p data-r>We may update this policy from time to time. The "last updated" date at the top will reflect any changes. Material changes will be communicated by email if you've previously submitted an enquiry.</p>
+
+      <p class="privacy-controller" data-r>
+        Controller: John Daniel Hickie, sole trader, Ireland<br>
+        Contact: <a href="mailto:ionmediaeire@gmail.com">ionmediaeire@gmail.com</a>
+      </p>
+
+    </div>
+  </main>
+
+  <!-- ================================
+       FOOTER
+       ================================ -->
+  <footer>
+    <div class="footer-logo">Í<span class="a">on</span></div>
+    <span>© 2026 Íon. Ireland.</span>
+    <div class="footer-right">
+      <div class="fdot"></div>
+      <span>Íon · Ireland</span>
+    </div>
+  </footer>
+
+  <script>
+    // ================================
+    // THEME TOGGLE
+    // ================================
+    (function () {
+      var html = document.documentElement;
+      var btn  = document.getElementById('theme-toggle');
+
+      function applyTheme(t) {
+        html.setAttribute('data-theme', t);
+        localStorage.setItem('ion-theme', t);
+        btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      }
+
+      btn.addEventListener('click', function () {
+        applyTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+      });
+
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function (e) {
+        if (!localStorage.getItem('ion-theme')) {
+          applyTheme(e.matches ? 'dark' : 'light');
+        }
+      });
+
+      applyTheme(html.getAttribute('data-theme') || 'light');
+    })();
+  </script>
+
+  <script>
+    // ================================
+    // DOT GRID PARALLAX
+    // ================================
+    (function () {
+      const STRENGTH = 10;
+      let tX = 0, tY = 0, cX = 0, cY = 0;
+      let raf;
+
+      document.addEventListener('mousemove', (e) => {
+        const nx = (e.clientX / window.innerWidth  - 0.5) * 2;
+        const ny = (e.clientY / window.innerHeight - 0.5) * 2;
+        tX = nx * STRENGTH;
+        tY = ny * STRENGTH;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      function tick() {
+        raf = null;
+        cX += (tX - cX) * 0.08;
+        cY += (tY - cY) * 0.08;
+        document.body.style.setProperty('--grid-x', cX.toFixed(2) + 'px');
+        document.body.style.setProperty('--grid-y', cY.toFixed(2) + 'px');
+        if (Math.abs(tX - cX) > 0.05 || Math.abs(tY - cY) > 0.05) {
+          raf = requestAnimationFrame(tick);
+        }
+      }
+    })();
+
+    // ================================
+    // NAV SCROLL STATE
+    // ================================
+    const nav = document.getElementById('nav');
+    const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 30);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ================================
+    // SCROLL REVEAL
+    // ================================
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('in');
+          revealObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('[data-r]').forEach(el => revealObs.observe(el));
+
+    // ================================
+    // CUSTOM CURSOR
+    // ================================
+    (function () {
+      const dot  = document.querySelector('.cursor');
+      const ring = document.querySelector('.cursor-ring');
+      if (!dot || !ring || window.matchMedia('(hover: none)').matches) return;
+
+      let mx = -200, my = -200;
+      let rx = -200, ry = -200;
+      let rafC;
+
+      document.addEventListener('mousemove', function (e) {
+        mx = e.clientX;
+        my = e.clientY;
+        dot.style.setProperty('--cx', mx + 'px');
+        dot.style.setProperty('--cy', my + 'px');
+        if (!rafC) rafC = requestAnimationFrame(lerpRing);
+      }, { passive: true });
+
+      function lerpRing() {
+        rafC = null;
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.setProperty('--rx', rx.toFixed(2) + 'px');
+        ring.style.setProperty('--ry', ry.toFixed(2) + 'px');
+        if (Math.abs(mx - rx) > 0.1 || Math.abs(my - ry) > 0.1) {
+          rafC = requestAnimationFrame(lerpRing);
+        }
+      }
+
+      document.querySelectorAll('a, button, [role="button"]').forEach(function (el) {
+        el.addEventListener('mouseenter', function () { document.body.classList.add('cursor-hover'); }, { passive: true });
+        el.addEventListener('mouseleave', function () { document.body.classList.remove('cursor-hover'); }, { passive: true });
+      });
+    })();
+  </script>
+
+</body>
+</html>

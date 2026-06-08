@@ -1322,6 +1322,32 @@
       z-index: 1;
       pointer-events: none;
     }
+
+    /* ================================
+       FORM CONSENT
+       ================================ */
+    .form-consent {
+      font-size: 12px;
+      color: var(--text-3);
+      line-height: 1.5;
+    }
+    .form-consent a {
+      color: var(--text-3);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+      transition: color 0.2s;
+    }
+    .form-consent a:hover { color: var(--text-2); }
+
+    /* ================================
+       FOOTER LINK
+       ================================ */
+    .footer-link {
+      color: var(--text-3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .footer-link:hover { color: var(--text-2); }
   </style>
 </head>
 <body>
@@ -1985,6 +2011,7 @@
               </button>
               <span id="formStatus"></span>
             </div>
+            <p class="form-consent">By submitting, you agree to our <a href="/privacy.html">privacy policy</a>.</p>
             <p id="formNote" style="display:none; margin-top:0.9rem; font-size:0.775rem; color:var(--text-3); line-height:1.6;">
               Reply usually lands within a minute. If you don't see it, check your spam folder — and consider marking it 'not spam' to help future messages land properly.
             </p>
@@ -2004,6 +2031,7 @@
     <div class="footer-logo">Í<span class="a">on</span></div>
     <span>© 2026 Íon. Ireland.</span>
     <div class="footer-right">
+      <a href="/privacy.html" class="footer-link">Privacy policy</a>
       <div class="fdot"></div>
       <span>Íon · Ireland</span>
     </div>
